@@ -1,0 +1,169 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+body += '  <div class="row">';
+body += '    <div class="col-12 mb-5" data-aos="fade-up">';
+body += '      <div class="d-flex justify-content-between align-items-center">';
+body += '        <div>';
+body += '          <h1 class="display-5 fw-bold mb-2">My Products</h1>';
+body += '          <p class="text-muted">Manage your listings and track performance</p>';
+body += '        </div>';
+body += '        <a href="/post-ad" class="btn btn-gradient">';
+body += '          <i class="bi bi-plus-circle me-2"></i>Add New Product';
+body += '        </a>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Stats Cards
+body += '  <div class="row g-4 mb-5">';
+body += '    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">';
+body += '      <div class="card glass p-4 text-center">';
+body += '        <div class="stat-icon mb-3" style="background: var(--primary-gradient);">';
+body += '          <i class="bi bi-box fs-3"></i>';
+body += '        </div>';
+body += '        <h3 class="mb-1">' + stats.total + '</h3>';
+body += '        <p class="text-muted mb-0">Total Products</p>';
+body += '      </div>';
+body += '    </div>';
+body += '    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">';
+body += '      <div class="card glass p-4 text-center">';
+body += '        <div class="stat-icon mb-3" style="background: var(--success-gradient);">';
+body += '          <i class="bi bi-check-circle fs-3"></i>';
+body += '        </div>';
+body += '        <h3 class="mb-1">' + stats.active + '</h3>';
+body += '        <p class="text-muted mb-0">Active Listings</p>';
+body += '      </div>';
+body += '    </div>';
+body += '    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">';
+body += '      <div class="card glass p-4 text-center">';
+body += '        <div class="stat-icon mb-3" style="background: var(--warning-gradient);">';
+body += '          <i class="bi bi-currency-dollar fs-3"></i>';
+body += '        </div>';
+body += '        <h3 class="mb-1">' + stats.sold + '</h3>';
+body += '        <p class="text-muted mb-0">Items Sold</p>';
+body += '      </div>';
+body += '    </div>';
+body += '    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">';
+body += '      <div class="card glass p-4 text-center">';
+body += '        <div class="stat-icon mb-3" style="background: var(--secondary-gradient);">';
+body += '          <i class="bi bi-eye fs-3"></i>';
+body += '        </div>';
+body += '        <h3 class="mb-1">' + stats.totalViews + '</h3>';
+body += '        <p class="text-muted mb-0">Total Views</p>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Products List
+body += '  <div class="row">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-4">';
+body += '        <div class="d-flex justify-content-between align-items-center mb-4">';
+body += '          <h4 class="mb-0">Your Listings</h4>';
+body += '          <div class="btn-group" role="group">';
+body += '            <input type="radio" class="btn-check" name="filter" id="all" checked>';
+body += '            <label class="btn btn-outline-light" for="all">All</label>';
+body += '            <input type="radio" class="btn-check" name="filter" id="active">';
+body += '            <label class="btn btn-outline-light" for="active">Active</label>';
+body += '            <input type="radio" class="btn-check" name="filter" id="sold">';
+body += '            <label class="btn btn-outline-light" for="sold">Sold</label>';
+body += '          </div>';
+body += '        </div>';
+
+if (products.length === 0) {
+    body += '        <div class="text-center py-5">';
+    body += '          <i class="bi bi-box fs-1 text-muted mb-3"></i>';
+    body += '          <h5>No products yet</h5>';
+    body += '          <p class="text-muted mb-4">Start selling by posting your first item</p>';
+    body += '          <a href="/post-ad" class="btn btn-gradient">';
+    body += '            <i class="bi bi-plus-circle me-2"></i>Post Your First Item';
+    body += '          </a>';
+    body += '        </div>';
+} else {
+    body += '        <div class="row g-4">';
+    for (var i = 0; i < products.length; i++) {
+        var product = products[i];
+        var statusClass = product.status === 'available' ? 'success' : 'secondary';
+        var statusText = product.status === 'available' ? 'Active' : 'Sold';
+        
+        body += '          <div class="col-lg-4 col-md-6 product-item" data-status="' + product.status + '">';
+        body += '            <div class="card h-100">';
+        if (product.images && product.images.length > 0) {
+            body += '              <img src="/uploads/' + product.images[0] + '" class="card-img-top" style="height: 200px; object-fit: cover;">';
+        } else {
+            body += '              <div class="card-img-top d-flex align-items-center justify-content-center bg-secondary" style="height: 200px;">';
+            body += '                <i class="bi bi-image fs-1 text-muted"></i>';
+            body += '              </div>';
+        }
+        body += '              <div class="card-body d-flex flex-column">';
+        body += '                <div class="d-flex justify-content-between align-items-start mb-2">';
+        body += '                  <h6 class="card-title mb-0">' + product.title + '</h6>';
+        body += '                  <span class="badge bg-' + statusClass + '">' + statusText + '</span>';
+        body += '                </div>';
+        body += '                <p class="text-muted small mb-2">₹' + product.price + '</p>';
+        body += '                <p class="card-text text-muted small flex-grow-1">' + (product.description.length > 100 ? product.description.substring(0, 100) + '...' : product.description) + '</p>';
+        body += '                <div class="d-flex justify-content-between align-items-center mt-auto">';
+        body += '                  <small class="text-muted">';
+        body += '                    <i class="bi bi-eye me-1"></i>' + (product.views || 0) + ' views';
+        body += '                  </small>';
+        body += '                  <div class="btn-group btn-group-sm">';
+        body += '                    <a href="/product/' + product._id + '" class="btn btn-outline-light">';
+        body += '                      <i class="bi bi-eye"></i>';
+        body += '                    </a>';
+        if (product.status === 'available') {
+            body += '                    <a href="/edit-product/' + product._id + '" class="btn btn-outline-light">';
+            body += '                      <i class="bi bi-pencil"></i>';
+            body += '                    </a>';
+        }
+        body += '                  </div>';
+        body += '                </div>';
+        body += '              </div>';
+        body += '            </div>';
+        body += '          </div>';
+    }
+    body += '        </div>';
+}
+
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+body += '<style>';
+body += '.stat-icon {';
+body += '  width: 60px;';
+body += '  height: 60px;';
+body += '  border-radius: 50%;';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  margin: 0 auto;';
+body += '  color: white;';
+body += '}';
+body += '</style>';
+
+body += '<script>';
+body += 'document.addEventListener("DOMContentLoaded", function() {';
+body += '  const filterButtons = document.querySelectorAll("input[name=filter]");';
+body += '  const productItems = document.querySelectorAll(".product-item");';
+body += '  ';
+body += '  filterButtons.forEach(button => {';
+body += '    button.addEventListener("change", function() {';
+body += '      const filter = this.id;';
+body += '      productItems.forEach(item => {';
+body += '        if (filter === "all") {';
+body += '          item.style.display = "block";';
+body += '        } else if (filter === "active") {';
+body += '          item.style.display = item.dataset.status === "available" ? "block" : "none";';
+body += '        } else if (filter === "sold") {';
+body += '          item.style.display = item.dataset.status === "sold" ? "block" : "none";';
+body += '        }';
+body += '      });';
+body += '    });';
+body += '  });';
+body += '});';
+body += '</script>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

@@ -1,0 +1,189 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+
+// Hero Section
+body += '  <div class="row text-center mb-5">';
+body += '    <div class="col-12" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-envelope"></i> Contact Us';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">Get in Touch</h1>';
+body += '      <p class="lead text-muted">We\'re here to help and answer any questions you might have</p>';
+body += '    </div>';
+body += '  </div>';
+
+body += '  <div class="row g-5">';
+body += '    <div class="col-lg-8" data-aos="fade-right">';
+body += '      <div class="card glass-strong p-5">';
+body += '        <h3 class="mb-4">Send us a Message</h3>';
+body += '        <form id="contactForm">';
+body += '          <div class="row g-3">';
+body += '            <div class="col-md-6">';
+body += '              <label class="form-label">Your Name</label>';
+body += '              <input type="text" class="form-control" name="name" required>';
+body += '            </div>';
+body += '            <div class="col-md-6">';
+body += '              <label class="form-label">Email Address</label>';
+body += '              <input type="email" class="form-control" name="email" required>';
+body += '            </div>';
+body += '            <div class="col-12">';
+body += '              <label class="form-label">Subject</label>';
+body += '              <select class="form-select" name="subject" required>';
+body += '                <option value="">Choose a topic...</option>';
+body += '                <option value="general">General Inquiry</option>';
+body += '                <option value="technical">Technical Support</option>';
+body += '                <option value="account">Account Issues</option>';
+body += '                <option value="safety">Safety Concerns</option>';
+body += '                <option value="feedback">Feedback & Suggestions</option>';
+body += '                <option value="partnership">Partnership Opportunities</option>';
+body += '              </select>';
+body += '            </div>';
+body += '            <div class="col-12">';
+body += '              <label class="form-label">Message</label>';
+body += '              <textarea class="form-control" name="message" rows="6" placeholder="Tell us how we can help you..." required></textarea>';
+body += '            </div>';
+body += '            <div class="col-12">';
+body += '              <div class="form-check">';
+body += '                <input class="form-check-input" type="checkbox" id="newsletter">';
+body += '                <label class="form-check-label" for="newsletter">';
+body += '                  Subscribe to our newsletter for updates and tips';
+body += '                </label>';
+body += '              </div>';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="mt-4">';
+body += '            <button type="submit" class="btn btn-gradient btn-lg">';
+body += '              <i class="bi bi-send me-2"></i>Send Message';
+body += '            </button>';
+body += '          </div>';
+body += '        </form>';
+body += '      </div>';
+body += '    </div>';
+
+body += '    <div class="col-lg-4" data-aos="fade-left">';
+body += '      <div class="row g-4">';
+
+// Contact Info Cards
+var contactMethods = [
+    { icon: 'bi-envelope-fill', title: 'Email Support', info: 'support@campushub.pro', desc: 'We typically respond within 24 hours' },
+    { icon: 'bi-chat-dots-fill', title: 'Live Chat', info: 'Available 9 AM - 6 PM', desc: 'Get instant help from our team' },
+    { icon: 'bi-telephone-fill', title: 'Phone Support', info: '+91 XXXXX XXXXX', desc: 'Monday to Friday, 10 AM - 5 PM' },
+    { icon: 'bi-geo-alt-fill', title: 'Office Address', info: 'Bangalore, India', desc: 'Visit us for in-person support' }
+];
+
+for (var i = 0; i < contactMethods.length; i++) {
+    var method = contactMethods[i];
+    body += '        <div class="col-12">';
+    body += '          <div class="card glass p-4 text-center contact-card">';
+    body += '            <div class="contact-icon mb-3">';
+    body += '              <i class="' + method.icon + '"></i>';
+    body += '            </div>';
+    body += '            <h5 class="mb-2">' + method.title + '</h5>';
+    body += '            <p class="fw-bold mb-1">' + method.info + '</p>';
+    body += '            <small class="text-muted">' + method.desc + '</small>';
+    body += '          </div>';
+    body += '        </div>';
+}
+
+body += '      </div>';
+
+// FAQ Link
+body += '      <div class="card glass-strong p-4 mt-4 text-center">';
+body += '        <h5 class="mb-3">Quick Answers</h5>';
+body += '        <p class="text-muted mb-3">Check our FAQ for instant answers to common questions</p>';
+body += '        <a href="/faq" class="btn btn-outline-light">';
+body += '          <i class="bi bi-question-circle me-2"></i>View FAQ';
+body += '        </a>';
+body += '      </div>';
+
+body += '    </div>';
+body += '  </div>';
+
+// Response Time Info
+body += '  <div class="row mt-5">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass p-4">';
+body += '        <div class="row text-center">';
+body += '          <div class="col-md-3">';
+body += '            <div class="response-stat">';
+body += '              <div class="stat-number">< 2 hrs</div>';
+body += '              <div class="stat-label">Average Response Time</div>';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-md-3">';
+body += '            <div class="response-stat">';
+body += '              <div class="stat-number">98%</div>';
+body += '              <div class="stat-label">Customer Satisfaction</div>';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-md-3">';
+body += '            <div class="response-stat">';
+body += '              <div class="stat-number">24/7</div>';
+body += '              <div class="stat-label">Email Support</div>';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-md-3">';
+body += '            <div class="response-stat">';
+body += '              <div class="stat-number">1000+</div>';
+body += '              <div class="stat-label">Happy Students</div>';
+body += '            </div>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+body += '</div>';
+
+body += '<style>';
+body += '.contact-card {';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.contact-card:hover {';
+body += '  transform: translateY(-5px);';
+body += '  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);';
+body += '}';
+body += '.contact-icon {';
+body += '  width: 60px;';
+body += '  height: 60px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  margin: 0 auto;';
+body += '  color: white;';
+body += '  font-size: 1.5rem;';
+body += '}';
+body += '.response-stat {';
+body += '  padding: 1rem;';
+body += '}';
+body += '.stat-number {';
+body += '  font-size: 2rem;';
+body += '  font-weight: bold;';
+body += '  background: var(--primary-gradient);';
+body += '  -webkit-background-clip: text;';
+body += '  -webkit-text-fill-color: transparent;';
+body += '  background-clip: text;';
+body += '}';
+body += '.stat-label {';
+body += '  color: var(--text-muted);';
+body += '  font-size: 0.9rem;';
+body += '}';
+body += '</style>';
+
+body += '<script>';
+body += 'document.getElementById("contactForm").addEventListener("submit", function(e) {';
+body += '  e.preventDefault();';
+body += '  const formData = new FormData(this);';
+body += '  const data = Object.fromEntries(formData);';
+body += '  ';
+body += '  // Show success message';
+body += '  alert("Thank you for your message! We\'ll get back to you within 24 hours.");';
+body += '  this.reset();';
+body += '});';
+body += '</script>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

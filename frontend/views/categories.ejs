@@ -1,0 +1,77 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+body += '  <div class="row">';
+body += '    <div class="col-12 text-center mb-5" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-tags"></i> Browse Categories';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">Explore Categories</h1>';
+body += '      <p class="lead text-muted">Find exactly what you\'re looking for</p>';
+body += '    </div>';
+body += '  </div>';
+
+body += '  <div class="row g-4">';
+for (var i = 0; i < categories.length; i++) {
+    var cat = categories[i];
+    body += '    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 100) + '">';
+    body += '      <a href="/dashboard?category=' + encodeURIComponent(cat.name) + '" class="text-decoration-none">';
+    body += '        <div class="card card-premium h-100 p-4 text-center category-card">';
+    body += '          <div class="category-icon mb-4">';
+    body += '            <i class="' + cat.icon + '"></i>';
+    body += '          </div>';
+    body += '          <h4 class="mb-3">' + cat.name + '</h4>';
+    body += '          <p class="text-muted mb-4">' + cat.description + '</p>';
+    body += '          <div class="d-flex justify-content-between align-items-center">';
+    body += '            <span class="badge badge-gradient">' + cat.count + ' items</span>';
+    body += '            <i class="bi bi-arrow-right fs-5"></i>';
+    body += '          </div>';
+    body += '        </div>';
+    body += '      </a>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+body += '  <div class="row mt-5">';
+body += '    <div class="col-12 text-center" data-aos="fade-up">';
+body += '      <div class="card glass-strong p-5">';
+body += '        <h3 class="mb-3">Can\'t find what you\'re looking for?</h3>';
+body += '        <p class="text-muted mb-4">Try our advanced search or post a request</p>';
+body += '        <div class="d-flex justify-content-center gap-3">';
+body += '          <a href="/dashboard" class="btn btn-gradient">';
+body += '            <i class="bi bi-search me-2"></i>Advanced Search';
+body += '          </a>';
+body += '          <a href="/post-ad" class="btn btn-secondary-gradient">';
+body += '            <i class="bi bi-plus-circle me-2"></i>Post Request';
+body += '          </a>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+body += '<style>';
+body += '.category-card {';
+body += '  transition: all 0.3s ease;';
+body += '  cursor: pointer;';
+body += '}';
+body += '.category-card:hover {';
+body += '  transform: translateY(-10px);';
+body += '  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);';
+body += '}';
+body += '.category-icon {';
+body += '  width: 80px;';
+body += '  height: 80px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  margin: 0 auto;';
+body += '  color: white;';
+body += '  font-size: 2rem;';
+body += '}';
+body += '</style>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

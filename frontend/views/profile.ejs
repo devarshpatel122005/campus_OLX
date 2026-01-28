@@ -1,0 +1,199 @@
+<% const body=` <div class="container">
+    <!-- Profile Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="brand-gradient mb-2">
+                            <i class="bi bi-person-circle"></i> My Profile
+                        </h2>
+                        <p class="text-muted mb-1">
+                            <i class="bi bi-envelope"></i> ${user.email}
+                        </p>
+                        <small class="text-muted">
+                            Member since ${new Date(user.createdAt).toLocaleDateString('en-IN')}
+                        </small>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block text-center px-3">
+                            <div class="fs-3 fw-bold" style="color: #10b981;">${activeProducts.length}</div>
+                            <small class="text-muted">Active Listings</small>
+                        </div>
+                        <div class="d-inline-block text-center px-3">
+                            <div class="fs-3 fw-bold" style="color: #667eea;">${soldProducts.length}</div>
+                            <small class="text-muted">Sold Items</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button">
+                <i class="bi bi-box-seam"></i> Active Listings (${activeProducts.length})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sold-tab" data-bs-toggle="tab" data-bs-target="#sold" type="button">
+                <i class="bi bi-check-circle"></i> Sold Items (${soldProducts.length})
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="profileTabsContent">
+        <!-- Active Listings Tab -->
+        <div class="tab-pane fade show active" id="active" role="tabpanel">
+            ${activeProducts.length === 0 ? `
+            <div class="card text-center p-5">
+                <i class="bi bi-box-seam fs-1 mb-3" style="color: #667eea;"></i>
+                <h4>No active listings</h4>
+                <p class="text-muted">Start selling by posting your first item!</p>
+                <a href="/post-ad" class="btn btn-gradient mt-2">
+                    <i class="bi bi-plus-circle"></i> Post an Item
+                </a>
+            </div>
+            ` : `
+            <div class="row g-4">
+                ${activeProducts.map(product => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div
+                            style="height: 200px; background: ${product.images.length > 0 ? `url('${product.images[0]}') center/cover` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}; border-radius: 10px 10px 0 0; position: relative;">
+                            ${product.images.length === 0 ? `<div
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px;">
+                                <i class="bi bi-image"></i></div>` : ''}
+                            <span
+                                class="badge bg-primary position-absolute top-0 end-0 m-2 text-capitalize">${product.category}</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text text-muted small text-truncate">${product.description}</p>
+                            <div class="fs-4 fw-bold mb-3" style="color: #10b981;">₹${product.price}</div>
+
+                            ${product.views > 0 ? `
+                            <div class="mb-2">
+                                <small class="text-muted"><i class="bi bi-eye"></i> ${product.views} view${product.views
+                                    !== 1 ? 's' : ''}</small>
+                            </div>
+                            ` : ''}
+
+                            <div class="d-grid gap-2">
+                                <a href="/product/${product._id}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                <a href="/edit-product/${product._id}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button class="btn btn-sm btn-outline-success mark-sold-btn" data-id="${product._id}">
+                                    <i class="bi bi-check-circle"></i> Mark as Sold
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${product._id}">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            `}
+        </div>
+
+        <!-- Sold Items Tab -->
+        <div class="tab-pane fade" id="sold" role="tabpanel">
+            ${soldProducts.length === 0 ? `
+            <div class="card text-center p-5">
+                <i class="bi bi-archive fs-1 mb-3" style="color: #64748b;"></i>
+                <h4>No sold items yet</h4>
+                <p class="text-muted">Your sold items will appear here</p>
+            </div>
+            ` : `
+            <div class="row g-4">
+                ${soldProducts.map(product => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100" style="opacity: 0.8;">
+                        <div
+                            style="height: 200px; background: ${product.images.length > 0 ? `url('${product.images[0]}') center/cover` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}; border-radius: 10px 10px 0 0; position: relative;">
+                            ${product.images.length === 0 ? `<div
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px;">
+                                <i class="bi bi-image"></i></div>` : ''}
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2">SOLD</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text text-muted small text-truncate">${product.description}</p>
+                            <div class="fs-4 fw-bold mb-2" style="color: #10b981;">₹${product.price}</div>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar-check"></i> Sold on ${new
+                                Date(product.soldAt).toLocaleDateString('en-IN')}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            `}
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Mark as Sold
+        document.querySelectorAll('.mark-sold-btn').forEach(btn => {
+            btn.addEventListener('click', async function () {
+                if (!confirm('Are you sure you want to mark this item as sold?')) return;
+
+                const productId = this.dataset.id;
+                try {
+                    const response = await fetch(\`/api/products/\${productId}/mark-sold\`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('Product marked as sold!');
+                window.location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to update product');
+        }
+    });
+});
+
+// Delete Product
+document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+        
+        const productId = this.dataset.id;
+        try {
+            const response = await fetch(\`/api/products/\${productId}\`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('Product deleted successfully!');
+                window.location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to delete product');
+        }
+    });
+});
+    </script>
+    `;
+    %>
+    <%- include('layout', { user, body }) %>

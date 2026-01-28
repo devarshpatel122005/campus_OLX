@@ -1,0 +1,238 @@
+<% const body=` <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card p-4">
+                <div class="card-body">
+                    <h2 class="mb-4">
+                        <i class="bi bi-plus-circle brand-gradient"></i>
+                        <span class="brand-gradient">Post an Item</span>
+                    </h2>
+
+                    <div id="postMessage"></div>
+
+                    <form id="postForm" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-tag"></i> Title
+                                </label>
+                                <input type="text" class="form-control" id="title" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-list"></i> Category
+                                </label>
+                                <select class="form-select" id="category" required>
+                                    <option value="">Select category</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="books">Books</option>
+                                    <option value="furniture">Furniture</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-file-text"></i> Description
+                            </label>
+                            <textarea class="form-control" id="description" rows="3" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-currency-rupee"></i> Original Price
+                                </label>
+                                <input type="number" class="form-control" id="originalPrice" min="0" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-clock-history"></i> Age (months)
+                                </label>
+                                <input type="number" class="form-control" id="ageMonths" min="0" value="0" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-star"></i> Condition (1-5)
+                                </label>
+                                <select class="form-select" id="condition" required>
+                                    <option value="">Select</option>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="5">5 - Like New</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- AI Price Suggestion Section -->
+                        <div class="card mb-3"
+                            style="background: rgba(102, 126, 234, 0.1); border: 1px solid rgba(102, 126, 234, 0.3);">
+                            <div class="card-body">
+                                <h5>
+                                    <i class="bi bi-robot" style="color: #667eea;"></i> AI Price Suggestion
+                                </h5>
+                                <p class="text-muted small mb-3">
+                                    Get a smart price recommendation based on your item's details
+                                </p>
+
+                                <button type="button" class="btn btn-outline-primary" id="getAiPriceBtn">
+                                    <i class="bi bi-magic"></i> Get AI Price Suggestion
+                                </button>
+
+                                <div id="aiPriceResult" class="mt-3" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <h4 class="mb-2">Suggested Price: ₹<span id="aiPrice">0</span></h4>
+                                        <p class="mb-0 small">This is based on market trends and item condition</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-currency-rupee"></i> Your Selling Price
+                            </label>
+                            <input type="number" class="form-control" id="price" min="0" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-image"></i> Images (up to 5)
+                            </label>
+                            <input type="file" class="form-control" id="images" accept="image/*" multiple>
+                            <div class="form-text">Upload product images (JPEG, PNG)</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-gradient w-100 py-2" id="submitBtn">
+                            <i class="bi bi-check-circle"></i> Post Item
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        let aiSuggestedPrice = null;
+
+        // Get AI Price Suggestion
+        document.getElementById('getAiPriceBtn').addEventListener('click', async () => {
+            const originalPrice = document.getElementById('originalPrice').value;
+            const age = document.getElementById('ageMonths').value;
+            const condition = document.getElementById('condition').value;
+            const category = document.getElementById('category').value;
+
+            if (!originalPrice || !condition || !category) {
+                alert('Please fill in Original Price, Age, Condition, and Category first');
+                return;
+            }
+
+            const btn = document.getElementById('getAiPriceBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Calculating...';
+
+            try {
+                const response = await fetch('/api/get-price', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        original_price: originalPrice,
+                        age: age || 0,
+                        condition: condition,
+                        category: category
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    aiSuggestedPrice = data.predicted_price;
+                    document.getElementById('aiPrice').textContent = data.predicted_price.toFixed(2);
+                    document.getElementById('aiPriceResult').style.display = 'block';
+                    document.getElementById('price').value = data.predicted_price.toFixed(0);
+                } else {
+                    alert('Failed to get price suggestion');
+                }
+            } catch (error) {
+                alert('AI service is not available. Please enter price manually.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-magic"></i> Get AI Price Suggestion';
+            }
+        });
+
+        // Submit Form
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('originalPrice', document.getElementById('originalPrice').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('condition', document.getElementById('condition').value);
+            formData.append('ageMonths', document.getElementById('ageMonths').value);
+
+            if (aiSuggestedPrice) {
+                formData.append('ai_suggested_price', aiSuggestedPrice);
+            }
+
+            const files = document.getElementById('images').files;
+            for (let i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('postMessage');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Posting...';
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.innerHTML = \`
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Item posted successfully! Redirecting...
+            </div>
+          \`;
+          setTimeout(() => window.location.href = '/dashboard', 1500);
+        } else {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-danger">
+              <i class="bi bi-x-circle"></i> \${data.message}
+            </div>
+          \`;
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="bi bi-check-circle"></i> Post Item';
+        }
+      } catch (error) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-danger">
+            <i class="bi bi-x-circle"></i> Failed to post item. Please try again.
+          </div>
+        \`;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bi bi-check-circle"></i> Post Item';
+      }
+    });
+    </script>
+    `;
+    %>
+    <%- include('layout', { user, body }) %>

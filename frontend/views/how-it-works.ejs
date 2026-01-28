@@ -1,0 +1,150 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+
+// Hero Section
+body += '  <div class="row text-center mb-5">';
+body += '    <div class="col-12" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-lightbulb"></i> How It Works';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">Simple. Smart. Secure.</h1>';
+body += '      <p class="lead text-muted">Get started in just 3 easy steps</p>';
+body += '    </div>';
+body += '  </div>';
+
+// Steps Section
+body += '  <div class="row g-5 mb-5">';
+body += '    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">';
+body += '      <div class="text-center">';
+body += '        <div class="step-number mb-4">1</div>';
+body += '        <div class="step-icon mb-4">';
+body += '          <i class="bi bi-person-plus-fill"></i>';
+body += '        </div>';
+body += '        <h4 class="mb-3">Sign Up</h4>';
+body += '        <p class="text-muted">Create your account using your college email address. We verify all users to ensure a safe community.</p>';
+body += '      </div>';
+body += '    </div>';
+body += '    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">';
+body += '      <div class="text-center">';
+body += '        <div class="step-number mb-4">2</div>';
+body += '        <div class="step-icon mb-4">';
+body += '          <i class="bi bi-camera-fill"></i>';
+body += '        </div>';
+body += '        <h4 class="mb-3">Post Items</h4>';
+body += '        <p class="text-muted">Upload photos and details of items you want to sell. Our AI suggests optimal prices based on market data.</p>';
+body += '      </div>';
+body += '    </div>';
+body += '    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">';
+body += '      <div class="text-center">';
+body += '        <div class="step-number mb-4">3</div>';
+body += '        <div class="step-icon mb-4">';
+body += '          <i class="bi bi-chat-dots-fill"></i>';
+body += '        </div>';
+body += '        <h4 class="mb-3">Connect & Trade</h4>';
+body += '        <p class="text-muted">Chat with interested buyers, negotiate prices, and arrange safe meetups on campus.</p>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Features Section
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center mb-5" data-aos="fade-up">';
+body += '      <h2 class="display-5 fw-bold mb-4">Powerful Features</h2>';
+body += '      <p class="lead text-muted">Everything you need for successful campus trading</p>';
+body += '    </div>';
+body += '  </div>';
+
+body += '  <div class="row g-4 mb-5">';
+var features = [
+    { icon: 'bi-robot', title: 'AI Price Suggestions', desc: 'Get smart pricing recommendations based on similar items and market trends' },
+    { icon: 'bi-shield-check', title: 'Verified Community', desc: 'All users are verified with college email addresses for your safety' },
+    { icon: 'bi-lightning-charge', title: 'Instant Notifications', desc: 'Get notified immediately when someone messages you or shows interest' },
+    { icon: 'bi-heart', title: 'Smart Wishlist', desc: 'Save items you love and get alerts when similar products are posted' },
+    { icon: 'bi-search', title: 'Advanced Search', desc: 'Find exactly what you need with powerful filters and search options' },
+    { icon: 'bi-graph-up', title: 'Analytics Dashboard', desc: 'Track your selling performance with detailed insights and statistics' }
+];
+
+for (var i = 0; i < features.length; i++) {
+    var feature = features[i];
+    body += '    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 100) + '">';
+    body += '      <div class="card glass h-100 p-4">';
+    body += '        <div class="feature-icon mb-3">';
+    body += '          <i class="' + feature.icon + '"></i>';
+    body += '        </div>';
+    body += '        <h5 class="mb-3">' + feature.title + '</h5>';
+    body += '        <p class="text-muted">' + feature.desc + '</p>';
+    body += '      </div>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+// CTA Section
+body += '  <div class="row">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-5 text-center" data-aos="zoom-in">';
+body += '        <h3 class="mb-3">Ready to Get Started?</h3>';
+body += '        <p class="text-muted mb-4">Join thousands of students already trading on CampusHub Pro</p>';
+body += '        <div class="d-flex justify-content-center gap-3">';
+if (user) {
+    body += '          <a href="/dashboard" class="btn btn-gradient btn-lg">';
+    body += '            <i class="bi bi-search me-2"></i>Browse Items';
+    body += '          </a>';
+    body += '          <a href="/post-ad" class="btn btn-secondary-gradient btn-lg">';
+    body += '            <i class="bi bi-plus-circle me-2"></i>Sell Something';
+    body += '          </a>';
+} else {
+    body += '          <a href="/register" class="btn btn-gradient btn-lg">';
+    body += '            <i class="bi bi-person-plus me-2"></i>Sign Up Now';
+    body += '          </a>';
+    body += '          <a href="/login" class="btn btn-outline-light btn-lg">';
+    body += '            <i class="bi bi-box-arrow-in-right me-2"></i>Login';
+    body += '          </a>';
+}
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+body += '<style>';
+body += '.step-number {';
+body += '  width: 80px;';
+body += '  height: 80px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  color: white;';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  font-size: 2rem;';
+body += '  font-weight: bold;';
+body += '  margin: 0 auto;';
+body += '}';
+body += '.step-icon {';
+body += '  width: 100px;';
+body += '  height: 100px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--glass-bg);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  margin: 0 auto;';
+body += '  font-size: 3rem;';
+body += '  color: var(--text-primary);';
+body += '}';
+body += '.feature-icon {';
+body += '  width: 60px;';
+body += '  height: 60px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  color: white;';
+body += '  font-size: 1.5rem;';
+body += '}';
+body += '</style>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

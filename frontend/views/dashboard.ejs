@@ -1,0 +1,340 @@
+<%
+var body = '';
+body += '<div class="container py-4">';
+
+// Hero Section
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-shop"></i> Campus Marketplace';
+body += '      </div>';
+body += '      <h1 class="display-5 fw-bold mb-3">Discover Amazing Deals</h1>';
+body += '      <p class="lead text-muted">Find what you need from fellow students</p>';
+body += '    </div>';
+body += '  </div>';
+
+// Search & Filter Section
+body += '  <div class="row mb-4">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-4" data-aos="fade-up" data-aos-delay="100">';
+body += '        <div class="row g-3">';
+
+// Search Bar
+body += '          <div class="col-lg-6">';
+body += '            <div class="input-group">';
+body += '              <span class="input-group-text glass border-0">';
+body += '                <i class="bi bi-search"></i>';
+body += '              </span>';
+body += '              <input type="text" id="searchInput" class="form-control border-0" placeholder="Search products..." value="' + (filters.search || '') + '">';
+body += '            </div>';
+body += '          </div>';
+
+// Category Filter
+body += '          <div class="col-lg-3 col-md-6">';
+body += '            <select id="categoryFilter" class="form-select border-0">';
+body += '              <option value="all"' + (!filters.category || filters.category === 'all' ? ' selected' : '') + '>All Categories</option>';
+body += '              <option value="Electronics"' + (filters.category === 'Electronics' ? ' selected' : '') + '>Electronics</option>';
+body += '              <option value="Books"' + (filters.category === 'Books' ? ' selected' : '') + '>Books</option>';
+body += '              <option value="Furniture"' + (filters.category === 'Furniture' ? ' selected' : '') + '>Furniture</option>';
+body += '              <option value="Clothing"' + (filters.category === 'Clothing' ? ' selected' : '') + '>Clothing</option>';
+body += '              <option value="Sports"' + (filters.category === 'Sports' ? ' selected' : '') + '>Sports</option>';
+body += '              <option value="Vehicles"' + (filters.category === 'Vehicles' ? ' selected' : '') + '>Vehicles</option>';
+body += '              <option value="Other"' + (filters.category === 'Other' ? ' selected' : '') + '>Other</option>';
+body += '            </select>';
+body += '          </div>';
+
+// Sort Options
+body += '          <div class="col-lg-3 col-md-6">';
+body += '            <select id="sortFilter" class="form-select border-0">';
+body += '              <option value="newest"' + (!filters.sort || filters.sort === 'newest' ? ' selected' : '') + '>Newest First</option>';
+body += '              <option value="price-asc"' + (filters.sort === 'price-asc' ? ' selected' : '') + '>Price: Low to High</option>';
+body += '              <option value="price-desc"' + (filters.sort === 'price-desc' ? ' selected' : '') + '>Price: High to Low</option>';
+body += '            </select>';
+body += '          </div>';
+body += '        </div>';
+
+// Advanced Filters Toggle
+body += '        <div class="mt-3 d-flex gap-2">';
+body += '          <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters">';
+body += '            <i class="bi bi-sliders"></i> Advanced Filters';
+body += '          </button>';
+if (Object.keys(filters).length > 0) {
+    body += '          <button class="btn btn-outline-secondary btn-sm" id="clearFilters">';
+    body += '            <i class="bi bi-x-circle"></i> Clear Filters';
+    body += '          </button>';
+}
+body += '        </div>';
+
+// Advanced Filters Collapse
+body += '        <div class="collapse mt-3" id="advancedFilters">';
+body += '          <div class="row g-3">';
+body += '            <div class="col-md-6">';
+body += '              <label class="form-label small text-muted">Price Range</label>';
+body += '              <div class="row g-2">';
+body += '                <div class="col-6">';
+body += '                  <input type="number" id="minPrice" class="form-control" placeholder="Min ₹" value="' + (filters.minPrice || '') + '" min="0">';
+body += '                </div>';
+body += '                <div class="col-6">';
+body += '                  <input type="number" id="maxPrice" class="form-control" placeholder="Max ₹" value="' + (filters.maxPrice || '') + '" min="0">';
+body += '                </div>';
+body += '              </div>';
+body += '            </div>';
+body += '            <div class="col-md-6">';
+body += '              <label class="form-label small text-muted">Condition</label>';
+body += '              <div class="btn-group w-100" role="group">';
+body += '                <input type="radio" class="btn-check" name="conditionFilter" id="cond-all" value=""' + (!filters.condition ? ' checked' : '') + '>';
+body += '                <label class="btn btn-outline-light btn-sm" for="cond-all">All</label>';
+for (var star = 5; star >= 1; star--) {
+    body += '                <input type="radio" class="btn-check" name="conditionFilter" id="cond-' + star + '" value="' + star + '"' + (filters.condition == star ? ' checked' : '') + '>';
+    body += '                <label class="btn btn-outline-light btn-sm" for="cond-' + star + '">';
+    body += '                  ' + star + '<i class="bi bi-star-fill ms-1" style="color: #f59e0b; font-size: 10px;"></i>';
+    body += '                </label>';
+}
+body += '              </div>';
+body += '            </div>';
+body += '            <div class="col-12">';
+body += '              <button class="btn btn-gradient w-100" id="applyFilters">';
+body += '                <i class="bi bi-check-circle me-2"></i>Apply Filters';
+body += '              </button>';
+body += '            </div>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Products Header
+body += '  <div class="row mb-4">';
+body += '    <div class="col-md-8">';
+body += '      <h3 class="mb-1">Marketplace</h3>';
+body += '      <p class="text-muted">';
+body += '        ' + products.length + ' product' + (products.length !== 1 ? 's' : '') + ' found';
+if (Object.keys(filters).length > 0) {
+    body += ' (filtered)';
+}
+body += '      </p>';
+body += '    </div>';
+body += '    <div class="col-md-4 text-md-end">';
+body += '      <a href="/post-ad" class="btn btn-gradient">';
+body += '        <i class="bi bi-plus-circle me-2"></i>Sell Something';
+body += '      </a>';
+body += '    </div>';
+body += '  </div>';
+
+// Products Grid
+if (products.length === 0) {
+    body += '  <div class="row">';
+    body += '    <div class="col-12">';
+    body += '      <div class="card glass text-center p-5" data-aos="fade-up">';
+    body += '        <i class="bi bi-inbox fs-1 mb-3" style="color: #667eea;"></i>';
+    body += '        <h4>No products found</h4>';
+    body += '        <p class="text-muted">';
+    if (Object.keys(filters).length > 0) {
+        body += '          Try adjusting your filters or search terms';
+    } else {
+        body += '          Be the first to post an item!';
+    }
+    body += '        </p>';
+    if (Object.keys(filters).length > 0) {
+        body += '        <button class="btn btn-outline-light" id="clearFiltersEmpty">';
+        body += '          <i class="bi bi-x-circle me-2"></i>Clear Filters';
+        body += '        </button>';
+    } else {
+        body += '        <a href="/post-ad" class="btn btn-gradient mt-2">';
+        body += '          <i class="bi bi-plus-circle me-2"></i>Post Your First Item';
+        body += '        </a>';
+    }
+    body += '      </div>';
+    body += '    </div>';
+    body += '  </div>';
+} else {
+    body += '  <div class="row g-4">';
+    for (var i = 0; i < products.length; i++) {
+        var product = products[i];
+        body += '    <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 50) + '">';
+        body += '      <div class="card product-card h-100">';
+        
+        // Product Image
+        body += '        <div class="product-image-container">';
+        if (product.images && product.images.length > 0) {
+            body += '          <img src="/uploads/' + product.images[0] + '" class="product-image" alt="' + product.title + '">';
+        } else {
+            body += '          <div class="product-image-placeholder">';
+            body += '            <i class="bi bi-image fs-1"></i>';
+            body += '          </div>';
+        }
+        
+        // Category Badge
+        body += '          <span class="badge badge-gradient position-absolute top-0 end-0 m-2">';
+        body += '            ' + product.category;
+        body += '          </span>';
+        
+        // Wishlist Button
+        body += '          <button class="btn btn-sm position-absolute top-0 start-0 m-2 wishlist-btn glass" data-product-id="' + product._id + '">';
+        body += '            <i class="bi bi-heart"></i>';
+        body += '          </button>';
+        body += '        </div>';
+        
+        // Card Body
+        body += '        <div class="card-body d-flex flex-column">';
+        body += '          <h5 class="card-title text-truncate mb-2" title="' + product.title + '">';
+        body += '            ' + product.title;
+        body += '          </h5>';
+        body += '          <p class="card-text text-muted small mb-3 flex-grow-1">';
+        body += '            ' + (product.description.length > 80 ? product.description.substring(0, 80) + '...' : product.description);
+        body += '          </p>';
+        
+        // Price and Condition
+        body += '          <div class="d-flex justify-content-between align-items-center mb-3">';
+        body += '            <div>';
+        body += '              <div class="h5 mb-1 text-success fw-bold">₹' + product.price + '</div>';
+        if (product.ai_suggested_price) {
+            body += '              <div class="small text-muted">';
+            body += '                <i class="bi bi-robot me-1"></i>AI: ₹' + product.ai_suggested_price;
+            body += '              </div>';
+        }
+        body += '            </div>';
+        body += '            <div class="text-end">';
+        body += '              <div class="small text-muted mb-1">Condition</div>';
+        body += '              <div>';
+        for (var star = 1; star <= 5; star++) {
+            body += '                <i class="bi bi-star' + (star <= product.condition ? '-fill' : '') + '" style="color: #f59e0b; font-size: 12px;"></i>';
+        }
+        body += '              </div>';
+        body += '            </div>';
+        body += '          </div>';
+        
+        // Seller and Action
+        body += '          <div class="d-flex justify-content-between align-items-center mt-auto">';
+        body += '            <small class="text-muted">';
+        body += '              <i class="bi bi-person me-1"></i>' + product.sellerId.email.split('@')[0];
+        body += '            </small>';
+        body += '            <a href="/product/' + product._id + '" class="btn btn-gradient btn-sm">';
+        body += '              <i class="bi bi-eye me-1"></i>View';
+        body += '            </a>';
+        body += '          </div>';
+        
+        // Views
+        if (product.views > 0) {
+            body += '          <div class="mt-2 text-center">';
+            body += '            <small class="text-muted">';
+            body += '              <i class="bi bi-eye me-1"></i>' + product.views + ' view' + (product.views !== 1 ? 's' : '');
+            body += '            </small>';
+            body += '          </div>';
+        }
+        
+        body += '        </div>';
+        body += '      </div>';
+        body += '    </div>';
+    }
+    body += '  </div>';
+}
+
+body += '</div>';
+
+// Styles
+body += '<style>';
+body += '.product-card {';
+body += '  transition: all 0.3s ease;';
+body += '  overflow: hidden;';
+body += '}';
+body += '.product-card:hover {';
+body += '  transform: translateY(-5px);';
+body += '  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);';
+body += '}';
+body += '.product-image-container {';
+body += '  position: relative;';
+body += '  height: 220px;';
+body += '  overflow: hidden;';
+body += '}';
+body += '.product-image {';
+body += '  width: 100%;';
+body += '  height: 100%;';
+body += '  object-fit: cover;';
+body += '  transition: transform 0.3s ease;';
+body += '}';
+body += '.product-card:hover .product-image {';
+body += '  transform: scale(1.05);';
+body += '}';
+body += '.product-image-placeholder {';
+body += '  width: 100%;';
+body += '  height: 100%;';
+body += '  background: var(--primary-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  color: white;';
+body += '}';
+body += '.wishlist-btn {';
+body += '  border: none;';
+body += '  color: #e74c3c;';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.wishlist-btn:hover {';
+body += '  background: rgba(231, 76, 60, 0.1) !important;';
+body += '  transform: scale(1.1);';
+body += '}';
+body += '</style>';
+
+// JavaScript
+body += '<script>';
+body += 'const searchInput = document.getElementById("searchInput");';
+body += 'const categoryFilter = document.getElementById("categoryFilter");';
+body += 'const sortFilter = document.getElementById("sortFilter");';
+body += 'const minPrice = document.getElementById("minPrice");';
+body += 'const maxPrice = document.getElementById("maxPrice");';
+body += 'const applyFiltersBtn = document.getElementById("applyFilters");';
+body += 'const clearFiltersBtn = document.getElementById("clearFilters");';
+body += 'const clearFiltersEmpty = document.getElementById("clearFiltersEmpty");';
+
+body += 'function applyFilters() {';
+body += '  const params = new URLSearchParams();';
+body += '  if (searchInput.value.trim()) params.set("search", searchInput.value.trim());';
+body += '  if (categoryFilter.value !== "all") params.set("category", categoryFilter.value);';
+body += '  if (sortFilter.value !== "newest") params.set("sort", sortFilter.value);';
+body += '  if (minPrice.value) params.set("minPrice", minPrice.value);';
+body += '  if (maxPrice.value) params.set("maxPrice", maxPrice.value);';
+body += '  const conditionRadio = document.querySelector("input[name=\\"conditionFilter\\"]:checked");';
+body += '  if (conditionRadio && conditionRadio.value) params.set("condition", conditionRadio.value);';
+body += '  window.location.href = "/dashboard?" + params.toString();';
+body += '}';
+
+body += 'searchInput.addEventListener("keypress", (e) => {';
+body += '  if (e.key === "Enter") applyFilters();';
+body += '});';
+
+body += 'categoryFilter.addEventListener("change", applyFilters);';
+body += 'sortFilter.addEventListener("change", applyFilters);';
+
+body += 'if (applyFiltersBtn) applyFiltersBtn.addEventListener("click", applyFilters);';
+
+body += 'function clearFilters() { window.location.href = "/dashboard"; }';
+body += 'if (clearFiltersBtn) clearFiltersBtn.addEventListener("click", clearFilters);';
+body += 'if (clearFiltersEmpty) clearFiltersEmpty.addEventListener("click", clearFilters);';
+
+// Wishlist functionality
+body += 'document.querySelectorAll(".wishlist-btn").forEach(btn => {';
+body += '  btn.addEventListener("click", async (e) => {';
+body += '    e.preventDefault();';
+body += '    e.stopPropagation();';
+body += '    const productId = btn.dataset.productId;';
+body += '    const icon = btn.querySelector("i");';
+body += '    try {';
+body += '      const response = await fetch("/api/wishlist/toggle", {';
+body += '        method: "POST",';
+body += '        headers: { "Content-Type": "application/json" },';
+body += '        body: JSON.stringify({ productId })';
+body += '      });';
+body += '      const data = await response.json();';
+body += '      if (data.success) {';
+body += '        icon.className = data.added ? "bi bi-heart-fill" : "bi bi-heart";';
+body += '        btn.style.color = data.added ? "#e74c3c" : "#6c757d";';
+body += '      }';
+body += '    } catch (error) {';
+body += '      console.error("Wishlist error:", error);';
+body += '    }';
+body += '  });';
+body += '});';
+body += '</script>';
+%>
+    <%- include('layout', { user, body }) %>

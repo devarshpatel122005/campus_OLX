@@ -1,0 +1,418 @@
+<%
+const user = typeof locals.user !== 'undefined' ? locals.user : null;
+const body = `
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+  <div class="container">
+    <div class="row align-items-center min-vh-100 py-5">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="hero-content">
+          <div class="badge badge-gradient mb-4 px-3 py-2">
+            <i class="bi bi-stars"></i> AI-Powered Marketplace
+          </div>
+          <h1 class="display-2 fw-bold mb-4 lh-1">
+            Your Campus
+            <span class="position-relative">
+              <span class="navbar-brand">Marketplace</span>
+              <svg class="position-absolute" style="bottom: -10px; left: 0; width: 100%; height: 20px;" viewBox="0 0 300 20">
+                <path d="M0,15 Q150,0 300,15" stroke="url(#gradient)" stroke-width="3" fill="none"/>
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#667eea"/>
+                    <stop offset="100%" style="stop-color:#764ba2"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <br>Reimagined
+          </h1>
+          <p class="lead mb-5 text-secondary fs-4">
+            Buy, sell, and discover amazing deals from fellow students. 
+            Powered by AI for smart pricing and seamless experiences.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 mb-5">
+            <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg px-5 py-3">
+              <i class="bi bi-rocket-takeoff me-2"></i>Start Exploring
+            </a>
+            <a href="/dashboard" class="btn btn-secondary-gradient btn-lg px-5 py-3">
+              <i class="bi bi-search me-2"></i>Browse Items
+            </a>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-4">
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-robot fs-1"></i>
+                </div>
+                <h6 class="fw-bold">AI Pricing</h6>
+                <small class="text-muted">Smart suggestions</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-shield-check fs-1"></i>
+                </div>
+                <h6 class="fw-bold">Verified</h6>
+                <small class="text-muted">College emails only</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-lightning-charge fs-1"></i>
+                </div>
+                <h6 class="fw-bold">Instant</h6>
+                <small class="text-muted">Real-time chat</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+        <div class="hero-visual position-relative">
+          <div class="main-card glass-strong p-5 text-center">
+            <div class="hero-icon mb-4">
+              <i class="bi bi-shop-window" style="font-size: 8rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            </div>
+            <h3 class="mb-3">Your Campus Marketplace</h3>
+            <p class="text-muted">Where students connect, trade, and thrive</p>
+          </div>
+
+          <!-- Floating Stats Cards -->
+          <div class="floating-card top-right" data-aos="zoom-in" data-aos-delay="400">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-graph-up-arrow fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">AI Accuracy</div>
+                  <div class="h5 mb-0 fw-bold">95%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card bottom-left" data-aos="zoom-in" data-aos-delay="600">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-people fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">Active Users</div>
+                  <div class="h5 mb-0 fw-bold">1,200+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card top-left" data-aos="zoom-in" data-aos-delay="800">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-chat-dots fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">Messages</div>
+                  <div class="h5 mb-0 fw-bold">5K+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5" data-aos="fade-up">
+        <div class="badge badge-gradient mb-3 px-3 py-2">
+          <i class="bi bi-star-fill"></i> Premium Features
+        </div>
+        <h2 class="display-4 fw-bold mb-4">Why Choose CampusHub Pro?</h2>
+        <p class="lead text-muted">Experience the future of campus commerce</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-lightning-charge-fill"></i>
+          </div>
+          <h4 class="mb-3">Lightning Fast</h4>
+          <p class="text-muted mb-4">Post items in seconds with our streamlined interface. Start selling immediately with zero hassle.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>One-click posting</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Auto-categorization</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Instant notifications</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-robot"></i>
+          </div>
+          <h4 class="mb-3">AI-Powered Pricing</h4>
+          <p class="text-muted mb-4">Our machine learning algorithm analyzes market trends to suggest optimal prices for your items.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Smart price suggestions</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Market trend analysis</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Profit optimization</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-shield-check-fill"></i>
+          </div>
+          <h4 class="mb-3">Safe & Secure</h4>
+          <p class="text-muted mb-4">College email verification ensures you're only dealing with verified students from your campus.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Email verification</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Secure transactions</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Report system</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-chat-dots-fill"></i>
+          </div>
+          <h4 class="mb-3">Real-time Chat</h4>
+          <p class="text-muted mb-4">Instant messaging system with notifications keeps you connected with buyers and sellers.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Instant messaging</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Push notifications</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Message history</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-heart-fill"></i>
+          </div>
+          <h4 class="mb-3">Smart Wishlist</h4>
+          <p class="text-muted mb-4">Save items you love and get notified when similar products are posted or prices drop.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Save favorites</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Price drop alerts</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Similar item suggestions</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+        <div class="card card-premium h-100 p-4 text-center">
+          <div class="feature-icon-large mb-4">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <h4 class="mb-3">Analytics Dashboard</h4>
+          <p class="text-muted mb-4">Track your selling performance with detailed analytics and insights to optimize your listings.</p>
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Sales analytics</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>View tracking</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill text-success me-2"></i>
+              <small>Performance insights</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card glass-strong p-5 text-center" data-aos="zoom-in">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <h2 class="display-5 fw-bold mb-3">Ready to Start Trading?</h2>
+              <p class="lead text-muted mb-4">Join thousands of students already using CampusHub Pro</p>
+            </div>
+            <div class="col-lg-4">
+              <div class="d-flex flex-column gap-3">
+                <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg">
+                  <i class="bi bi-rocket-takeoff me-2"></i>Get Started Now
+                </a>
+                <a href="/how-it-works" class="btn btn-outline-light">
+                  <i class="bi bi-play-circle me-2"></i>See How It Works
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: var(--text-primary);
+  }
+
+  .feature-icon-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+    font-size: 2rem;
+  }
+
+  .hero-visual {
+    position: relative;
+    z-index: 1;
+  }
+
+  .main-card {
+    border-radius: 30px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .floating-card {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .floating-card.top-right {
+    top: -20px;
+    right: -20px;
+  }
+
+  .floating-card.bottom-left {
+    bottom: -20px;
+    left: -20px;
+  }
+
+  .floating-card.top-left {
+    top: 50%;
+    left: -30px;
+    transform: translateY(-50%);
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .feature-list {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .floating-card {
+      position: static;
+      margin: 1rem 0;
+    }
+    
+    .display-2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>
+`;
+%>
+    <%- include('layout', { user, body }) %>

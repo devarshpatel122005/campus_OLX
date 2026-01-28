@@ -1,0 +1,246 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+
+// Hero Section
+body += '  <div class="row text-center mb-5">';
+body += '    <div class="col-12" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-question-circle"></i> FAQ';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">Frequently Asked Questions</h1>';
+body += '      <p class="lead text-muted">Find quick answers to the most common questions</p>';
+body += '    </div>';
+body += '  </div>';
+
+// Search Bar
+body += '  <div class="row mb-5">';
+body += '    <div class="col-lg-8 mx-auto" data-aos="fade-up" data-aos-delay="100">';
+body += '      <div class="card glass-strong p-3">';
+body += '        <div class="input-group">';
+body += '          <span class="input-group-text glass border-0">';
+body += '            <i class="bi bi-search"></i>';
+body += '          </span>';
+body += '          <input type="text" class="form-control border-0" id="faqSearch" placeholder="Search FAQ...">';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// FAQ Categories
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center mb-4">';
+body += '      <div class="btn-group flex-wrap" role="group">';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="all" checked>';
+body += '        <label class="btn btn-outline-light" for="all">All</label>';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="getting-started">';
+body += '        <label class="btn btn-outline-light" for="getting-started">Getting Started</label>';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="buying">';
+body += '        <label class="btn btn-outline-light" for="buying">Buying</label>';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="selling">';
+body += '        <label class="btn btn-outline-light" for="selling">Selling</label>';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="safety">';
+body += '        <label class="btn btn-outline-light" for="safety">Safety</label>';
+body += '        <input type="radio" class="btn-check" name="faqCategory" id="technical">';
+body += '        <label class="btn btn-outline-light" for="technical">Technical</label>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// FAQ Items
+body += '  <div class="row">';
+body += '    <div class="col-lg-10 mx-auto">';
+body += '      <div class="accordion" id="faqAccordion">';
+
+var faqs = [
+    {
+        category: 'getting-started',
+        question: 'How do I create an account on CampusHub Pro?',
+        answer: 'To create an account, click "Join Now" and enter your college email address. You\'ll receive a verification email - click the link to verify your account. Only verified college students can use the platform.'
+    },
+    {
+        category: 'getting-started',
+        question: 'Why do I need to verify my college email?',
+        answer: 'Email verification ensures that only genuine college students can use the platform, creating a safer and more trustworthy community for everyone.'
+    },
+    {
+        category: 'selling',
+        question: 'How do I post an item for sale?',
+        answer: 'Click "Sell Item" in the navigation, fill out the product details, upload photos, and set your price. Our AI will suggest an optimal price based on similar items and market trends.'
+    },
+    {
+        category: 'selling',
+        question: 'How does AI pricing work?',
+        answer: 'Our AI analyzes similar products, market trends, item condition, and demand to suggest competitive prices. You can always set your own price, but AI suggestions help you sell faster.'
+    },
+    {
+        category: 'selling',
+        question: 'Can I edit my listing after posting?',
+        answer: 'Yes! Go to "My Products" and click the edit button on any active listing. You can update photos, description, price, and other details anytime.'
+    },
+    {
+        category: 'buying',
+        question: 'How do I search for specific items?',
+        answer: 'Use the search bar on the marketplace page. You can filter by category, price range, condition, and sort by newest, price, or relevance to find exactly what you need.'
+    },
+    {
+        category: 'buying',
+        question: 'How do I contact a seller?',
+        answer: 'Click "View Details" on any product, then click "Chat with Seller". Our built-in messaging system lets you communicate safely without sharing personal contact information.'
+    },
+    {
+        category: 'buying',
+        question: 'What payment methods are accepted?',
+        answer: 'We recommend cash for in-person transactions or UPI for digital payments. Never share bank details or make payments before meeting the seller and inspecting the item.'
+    },
+    {
+        category: 'safety',
+        question: 'How do I stay safe when meeting sellers/buyers?',
+        answer: 'Always meet in public places on campus during daytime, bring a friend if possible, inspect items before paying, and trust your instincts. Check our Safety Guide for detailed tips.'
+    },
+    {
+        category: 'safety',
+        question: 'What should I do if I encounter suspicious behavior?',
+        answer: 'Report the user immediately using the report button on their profile or contact our support team. For immediate safety concerns, contact campus security or local authorities.'
+    },
+    {
+        category: 'safety',
+        question: 'How do I report a user or listing?',
+        answer: 'Click the report button (flag icon) on any user profile or product listing. Provide details about the issue, and our team will investigate within 24 hours.'
+    },
+    {
+        category: 'technical',
+        question: 'Why can\'t I see images in listings?',
+        answer: 'This might be due to slow internet connection or browser issues. Try refreshing the page, clearing your browser cache, or using a different browser. Contact support if the problem persists.'
+    },
+    {
+        category: 'technical',
+        question: 'I\'m not receiving notifications. What should I do?',
+        answer: 'Check your notification settings in Account Settings. Ensure your email address is correct and check your spam folder. You can also enable browser notifications for real-time alerts.'
+    },
+    {
+        category: 'technical',
+        question: 'How do I delete my account?',
+        answer: 'Go to Settings > Account Settings > Danger Zone. Account deletion is permanent and cannot be undone. All your listings and data will be permanently removed.'
+    },
+    {
+        category: 'getting-started',
+        question: 'Is CampusHub Pro free to use?',
+        answer: 'Yes! CampusHub Pro is completely free for all college students. There are no listing fees, transaction fees, or subscription charges.'
+    },
+    {
+        category: 'selling',
+        question: 'How long do listings stay active?',
+        answer: 'Listings remain active until you mark them as sold or delete them. We recommend updating or refreshing old listings to maintain visibility in search results.'
+    }
+];
+
+for (var i = 0; i < faqs.length; i++) {
+    var faq = faqs[i];
+    body += '        <div class="accordion-item glass mb-3 faq-item" data-category="' + faq.category + '" data-aos="fade-up" data-aos-delay="' + (i * 50) + '">';
+    body += '          <h2 class="accordion-header">';
+    body += '            <button class="accordion-button collapsed glass" type="button" data-bs-toggle="collapse" data-bs-target="#faq' + i + '">';
+    body += '              <i class="bi bi-question-circle me-3 text-primary"></i>';
+    body += '              ' + faq.question;
+    body += '            </button>';
+    body += '          </h2>';
+    body += '          <div id="faq' + i + '" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">';
+    body += '            <div class="accordion-body">';
+    body += '              <p class="mb-0">' + faq.answer + '</p>';
+    body += '            </div>';
+    body += '          </div>';
+    body += '        </div>';
+}
+
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Still Need Help Section
+body += '  <div class="row mt-5">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-5 text-center" data-aos="zoom-in">';
+body += '        <h3 class="mb-3">Still have questions?</h3>';
+body += '        <p class="text-muted mb-4">Can\'t find the answer you\'re looking for? Our support team is here to help.</p>';
+body += '        <div class="d-flex justify-content-center gap-3 flex-wrap">';
+body += '          <a href="/contact" class="btn btn-gradient">';
+body += '            <i class="bi bi-envelope me-2"></i>Contact Support';
+body += '          </a>';
+body += '          <a href="/help" class="btn btn-outline-light">';
+body += '            <i class="bi bi-book me-2"></i>Help Center';
+body += '          </a>';
+body += '          <a href="/safety" class="btn btn-outline-light">';
+body += '            <i class="bi bi-shield-check me-2"></i>Safety Guide';
+body += '          </a>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+body += '</div>';
+
+body += '<style>';
+body += '.accordion-button {';
+body += '  background: transparent;';
+body += '  border: none;';
+body += '  color: var(--text-primary);';
+body += '}';
+body += '.accordion-button:not(.collapsed) {';
+body += '  background: var(--primary-gradient);';
+body += '  color: white;';
+body += '}';
+body += '.accordion-button:focus {';
+body += '  box-shadow: none;';
+body += '  border: none;';
+body += '}';
+body += '.accordion-item {';
+body += '  border: 1px solid var(--glass-border);';
+body += '  border-radius: 15px;';
+body += '  overflow: hidden;';
+body += '}';
+body += '.faq-item {';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.faq-item:hover {';
+body += '  transform: translateX(10px);';
+body += '  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);';
+body += '}';
+body += '.btn-check:checked + .btn-outline-light {';
+body += '  background: var(--primary-gradient);';
+body += '  border-color: transparent;';
+body += '}';
+body += '</style>';
+
+body += '<script>';
+body += 'document.addEventListener("DOMContentLoaded", function() {';
+body += '  const searchInput = document.getElementById("faqSearch");';
+body += '  const categoryButtons = document.querySelectorAll("input[name=faqCategory]");';
+body += '  const faqItems = document.querySelectorAll(".faq-item");';
+body += '  ';
+body += '  function filterFAQs() {';
+body += '    const searchTerm = searchInput.value.toLowerCase();';
+body += '    const selectedCategory = document.querySelector("input[name=faqCategory]:checked").id;';
+body += '    ';
+body += '    faqItems.forEach(item => {';
+body += '      const category = item.dataset.category;';
+body += '      const text = item.textContent.toLowerCase();';
+body += '      const matchesSearch = text.includes(searchTerm);';
+body += '      const matchesCategory = selectedCategory === "all" || category === selectedCategory;';
+body += '      ';
+body += '      if (matchesSearch && matchesCategory) {';
+body += '        item.style.display = "block";';
+body += '      } else {';
+body += '        item.style.display = "none";';
+body += '      }';
+body += '    });';
+body += '  }';
+body += '  ';
+body += '  searchInput.addEventListener("input", filterFAQs);';
+body += '  categoryButtons.forEach(button => {';
+body += '    button.addEventListener("change", filterFAQs);';
+body += '  });';
+body += '});';
+body += '</script>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

@@ -1,0 +1,171 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+
+// Hero Section
+body += '  <div class="row text-center mb-5">';
+body += '    <div class="col-12" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-question-circle"></i> Help Center';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">How can we help you?</h1>';
+body += '      <p class="lead text-muted">Find answers to common questions and get support</p>';
+body += '    </div>';
+body += '  </div>';
+
+// Search Bar
+body += '  <div class="row mb-5">';
+body += '    <div class="col-lg-8 mx-auto" data-aos="fade-up" data-aos-delay="100">';
+body += '      <div class="card glass-strong p-4">';
+body += '        <div class="input-group input-group-lg">';
+body += '          <span class="input-group-text glass border-0">';
+body += '            <i class="bi bi-search"></i>';
+body += '          </span>';
+body += '          <input type="text" class="form-control border-0" placeholder="Search for help articles...">';
+body += '          <button class="btn btn-gradient" type="button">';
+body += '            Search';
+body += '          </button>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Help Categories
+body += '  <div class="row g-4 mb-5">';
+var helpCategories = [
+    { icon: 'bi-person-plus', title: 'Getting Started', desc: 'Learn how to create your account and start trading', articles: 8 },
+    { icon: 'bi-camera', title: 'Posting Items', desc: 'Tips for creating great listings that sell fast', articles: 12 },
+    { icon: 'bi-chat-dots', title: 'Communication', desc: 'How to use chat and messaging features', articles: 6 },
+    { icon: 'bi-shield-check', title: 'Safety & Security', desc: 'Stay safe while buying and selling', articles: 10 },
+    { icon: 'bi-credit-card', title: 'Payments', desc: 'Understanding transactions and payments', articles: 5 },
+    { icon: 'bi-gear', title: 'Account Settings', desc: 'Manage your profile and preferences', articles: 7 }
+];
+
+for (var i = 0; i < helpCategories.length; i++) {
+    var cat = helpCategories[i];
+    body += '    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 100) + '">';
+    body += '      <div class="card glass h-100 p-4 text-center help-category">';
+    body += '        <div class="help-icon mb-3">';
+    body += '          <i class="' + cat.icon + '"></i>';
+    body += '        </div>';
+    body += '        <h5 class="mb-3">' + cat.title + '</h5>';
+    body += '        <p class="text-muted mb-3">' + cat.desc + '</p>';
+    body += '        <div class="mt-auto">';
+    body += '          <span class="badge badge-gradient">' + cat.articles + ' articles</span>';
+    body += '        </div>';
+    body += '      </div>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+// Popular Articles
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center mb-4" data-aos="fade-up">';
+body += '      <h2 class="display-6 fw-bold mb-3">Popular Articles</h2>';
+body += '      <p class="text-muted">Most viewed help articles</p>';
+body += '    </div>';
+body += '  </div>';
+
+body += '  <div class="row g-4 mb-5">';
+var popularArticles = [
+    { title: 'How to create your first listing', views: '2.3k', category: 'Getting Started' },
+    { title: 'Tips for taking great product photos', views: '1.8k', category: 'Posting Items' },
+    { title: 'How to stay safe when meeting buyers', views: '1.5k', category: 'Safety' },
+    { title: 'Understanding AI price suggestions', views: '1.2k', category: 'Pricing' },
+    { title: 'How to verify your college email', views: '980', category: 'Account' },
+    { title: 'Using the chat system effectively', views: '750', category: 'Communication' }
+];
+
+for (var i = 0; i < popularArticles.length; i++) {
+    var article = popularArticles[i];
+    body += '    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="' + (i * 50) + '">';
+    body += '      <div class="card glass p-4 article-card">';
+    body += '        <div class="d-flex align-items-start gap-3">';
+    body += '          <div class="article-number">' + (i + 1) + '</div>';
+    body += '          <div class="flex-grow-1">';
+    body += '            <h6 class="mb-2">' + article.title + '</h6>';
+    body += '            <div class="d-flex justify-content-between align-items-center">';
+    body += '              <span class="badge bg-secondary">' + article.category + '</span>';
+    body += '              <small class="text-muted">';
+    body += '                <i class="bi bi-eye me-1"></i>' + article.views + ' views';
+    body += '              </small>';
+    body += '            </div>';
+    body += '          </div>';
+    body += '          <i class="bi bi-arrow-right text-muted"></i>';
+    body += '        </div>';
+    body += '      </div>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+// Contact Support
+body += '  <div class="row">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-5 text-center" data-aos="zoom-in">';
+body += '        <div class="row align-items-center">';
+body += '          <div class="col-lg-8">';
+body += '            <h3 class="mb-3">Still need help?</h3>';
+body += '            <p class="text-muted mb-4">Can\'t find what you\'re looking for? Our support team is here to help.</p>';
+body += '          </div>';
+body += '          <div class="col-lg-4">';
+body += '            <div class="d-flex flex-column gap-3">';
+body += '              <a href="/contact" class="btn btn-gradient">';
+body += '                <i class="bi bi-envelope me-2"></i>Contact Support';
+body += '              </a>';
+body += '              <a href="/faq" class="btn btn-outline-light">';
+body += '                <i class="bi bi-question-circle me-2"></i>View FAQ';
+body += '              </a>';
+body += '            </div>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+body += '</div>';
+
+body += '<style>';
+body += '.help-category {';
+body += '  transition: all 0.3s ease;';
+body += '  cursor: pointer;';
+body += '}';
+body += '.help-category:hover {';
+body += '  transform: translateY(-5px);';
+body += '  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);';
+body += '}';
+body += '.help-icon {';
+body += '  width: 80px;';
+body += '  height: 80px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  margin: 0 auto;';
+body += '  color: white;';
+body += '  font-size: 2rem;';
+body += '}';
+body += '.article-card {';
+body += '  transition: all 0.3s ease;';
+body += '  cursor: pointer;';
+body += '}';
+body += '.article-card:hover {';
+body += '  transform: translateX(10px);';
+body += '  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);';
+body += '}';
+body += '.article-number {';
+body += '  width: 40px;';
+body += '  height: 40px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--primary-gradient);';
+body += '  color: white;';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  font-weight: bold;';
+body += '  flex-shrink: 0;';
+body += '}';
+body += '</style>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>

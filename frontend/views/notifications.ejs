@@ -1,0 +1,138 @@
+<%
+var body = '';
+body += '<div class="container">';
+
+// Header
+body += '<div class="row mb-4"><div class="col-12"><div class="d-flex justify-content-between align-items-center"><div>';
+body += '<h2 class="brand-gradient"><i class="bi bi-bell"></i> Notifications</h2>';
+body += '<p class="text-muted">' + notifications.length + ' notification' + (notifications.length !== 1 ? 's' : '') + '</p>';
+body += '</div>';
+
+var hasUnread = false;
+for (var i = 0; i < notifications.length; i++) {
+    if (!notifications[i].read) {
+        hasUnread = true;
+        break;
+    }
+}
+
+if (hasUnread) {
+    body += '<button class="btn btn-outline-primary" id="markAllRead"><i class="bi bi-check-all"></i> Mark All Read</button>';
+}
+body += '</div></div></div>';
+
+// Content
+if (notifications.length === 0) {
+    body += '<div class="row"><div class="col-12"><div class="card text-center p-5">';
+    body += '<i class="bi bi-bell-slash fs-1 mb-3" style="color: #667eea;"></i>';
+    body += '<h4>No notifications</h4><p class="text-muted">You are all caught up!</p>';
+    body += '</div></div></div>';
+} else {
+    body += '<div class="row"><div class="col-12">';
+    
+    for (var j = 0; j < notifications.length; j++) {
+        var n = notifications[j];
+        var cardClass = n.read ? 'read' : 'unread';
+        body += '<div class="card mb-3 notification-card ' + cardClass + '" data-id="' + n._id + '">';
+        body += '<div class="card-body"><div class="d-flex align-items-start">';
+        
+        // Icon
+        body += '<div class="notification-icon me-3">';
+        if (n.type === 'new_message') {
+            body += '<i class="bi bi-chat-dots fs-4" style="color: #3b82f6;"></i>';
+        } else if (n.type === 'wishlist') {
+            body += '<i class="bi bi-heart-fill fs-4" style="color: #ef4444;"></i>';
+        } else if (n.type === 'product_sold') {
+            body += '<i class="bi bi-check-circle-fill fs-4" style="color: #10b981;"></i>';
+        } else if (n.type === 'price_drop') {
+            body += '<i class="bi bi-arrow-down-circle-fill fs-4" style="color: #f59e0b;"></i>';
+        } else {
+            body += '<i class="bi bi-info-circle-fill fs-4" style="color: #667eea;"></i>';
+        }
+        body += '</div>';
+        
+        // Text
+        body += '<div class="flex-grow-1">';
+        body += '<h6 class="mb-1">' + n.title + '</h6>';
+        body += '<p class="text-muted mb-2">' + n.message + '</p>';
+        body += '<small class="text-muted"><i class="bi bi-clock"></i> <span class="time-ago" data-time="' + n.createdAt + '"></span></small>';
+        body += '</div>';
+        
+        // Badge
+        body += '<div>';
+        if (!n.read) {
+            body += '<span class="badge bg-primary">New</span>';
+        }
+        body += '</div></div>';
+        
+        // Link
+        if (n.link) {
+            body += '<div class="mt-2"><a href="' + n.link + '" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-right"></i> View</a></div>';
+        }
+        body += '</div></div>';
+    }
+    body += '</div></div>';
+}
+
+body += '</div>';
+
+// Styles
+body += '<style>';
+body += '.notification-card.unread { border-left: 4px solid #667eea; background: rgba(102, 126, 234, 0.05); }';
+body += '.notification-card.read { opacity: 0.7; }';
+body += '.notification-card { transition: all 0.3s ease; cursor: pointer; }';
+body += '.notification-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }';
+body += '</style>';
+
+// Script
+body += '<script>';
+body += 'function formatDate(d) {';
+body += '  var date = new Date(d);';
+body += '  var now = new Date();';
+body += '  var diff = now - date;';
+body += '  var min = Math.floor(diff / 60000);';
+body += '  var hrs = Math.floor(diff / 3600000);';
+body += '  var days = Math.floor(diff / 86400000);';
+body += '  if (min < 1) return "Just now";';
+body += '  if (min < 60) return min + " minute" + (min !== 1 ? "s" : "") + " ago";';
+body += '  if (hrs < 24) return hrs + " hour" + (hrs !== 1 ? "s" : "") + " ago";';
+body += '  if (days < 7) return days + " day" + (days !== 1 ? "s" : "") + " ago";';
+body += '  return date.toLocaleDateString("en-IN");';
+body += '}';
+body += 'var timeElems = document.querySelectorAll(".time-ago");';
+body += 'for (var i = 0; i < timeElems.length; i++) {';
+body += '  timeElems[i].textContent = formatDate(timeElems[i].dataset.time);';
+body += '}';
+body += 'var cards = document.querySelectorAll(".notification-card");';
+body += 'for (var i = 0; i < cards.length; i++) {';
+body += '  cards[i].addEventListener("click", function(e) {';
+body += '    if (e.target.closest("a")) return;';
+body += '    var nid = this.dataset.id;';
+body += '    var card = this;';
+body += '    var link = card.querySelector("a[href]") ? card.querySelector("a[href]").getAttribute("href") : null;';
+body += '    if (this.classList.contains("unread")) {';
+body += '      fetch("/api/notifications/" + nid + "/read", { method: "PATCH" })';
+body += '        .then(function() {';
+body += '          card.classList.remove("unread");';
+body += '          card.classList.add("read");';
+body += '          var badge = card.querySelector(".badge");';
+body += '          if (badge) badge.remove();';
+body += '          if (link) window.location.href = link;';
+body += '        });';
+body += '    } else if (link) {';
+body += '      window.location.href = link;';
+body += '    }';
+body += '  });';
+body += '}';
+body += 'var btn = document.getElementById("markAllRead");';
+body += 'if (btn) {';
+body += '  btn.addEventListener("click", function() {';
+body += '    fetch("/api/notifications/read-all", { method: "PATCH" })';
+body += '      .then(function(r) { return r.json(); })';
+body += '      .then(function(d) { if (d.success) window.location.reload(); });';
+body += '  });';
+body += '}';
+body += '</script>';
+%>
+
+    <%- include('layout', { user: user, body: body }) %>

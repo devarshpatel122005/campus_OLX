@@ -1,0 +1,95 @@
+<%
+var body = '';
+body += '<div class="container">';
+body += '  <div class="row">';
+body += '    <div class="col-lg-8 mx-auto">';
+body += '      <div class="card">';
+body += '        <div class="card-header" style="background: rgba(102, 126, 234, 0.1); border-bottom: 1px solid rgba(100, 116, 139, 0.2);">';
+body += '          <div class="d-flex justify-content-between align-items-center">';
+body += '            <div>';
+body += '              <h5 class="mb-1">';
+body += '                <i class="bi bi-chat-dots"></i> ' + product.title;
+body += '              </h5>';
+body += '              <small class="text-muted">Chat about this product</small>';
+body += '            </div>';
+body += '            <a href="/product/' + product._id + '" class="btn btn-sm btn-outline-secondary">';
+body += '              <i class="bi bi-box-arrow-up-right"></i> View Product';
+body += '            </a>';
+body += '          </div>';
+body += '        </div>';
+body += '        <div class="card-body p-0">';
+body += '          <div id="messagesContainer" style="height: 500px; overflow-y: auto; padding: 20px; background: rgba(15, 23, 42, 0.5);">';
+
+if (chat.messages.length === 0) {
+    body += '            <div class="text-center text-muted my-5">';
+    body += '              <i class="bi bi-chat-text fs-1"></i>';
+    body += '              <p class="mt-3">No messages yet. Start the conversation!</p>';
+    body += '            </div>';
+} else {
+    for (var i = 0; i < chat.messages.length; i++) {
+        var msg = chat.messages[i];
+        var isMine = msg.senderId.toString() === currentUserId.toString();
+        var justifyClass = isMine ? 'justify-content-end' : 'justify-content-start';
+        var bgColor = isMine ? 'var(--primary-gradient)' : 'rgba(30, 41, 59, 0.8)';
+        var textAlign = isMine ? 'text-end' : '';
+        
+        body += '            <div class="mb-3 d-flex ' + justifyClass + '">';
+        body += '              <div style="max-width: 70%;">';
+        body += '                <div class="p-3 rounded" style="background: ' + bgColor + '; color: white;">';
+        body += '                  ' + msg.message;
+        body += '                </div>';
+        body += '                <small class="text-muted d-block mt-1 ' + textAlign + '">';
+        body += '                  ' + new Date(msg.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        body += '                </small>';
+        body += '              </div>';
+        body += '            </div>';
+    }
+}
+
+body += '          </div>';
+body += '          <div class="p-3" style="border-top: 1px solid rgba(100, 116, 139, 0.2);">';
+body += '            <form id="messageForm" class="d-flex gap-2">';
+body += '              <input type="text" class="form-control" id="messageInput" placeholder="Type your message..." required />';
+body += '              <button type="submit" class="btn btn-gradient">';
+body += '                <i class="bi bi-send"></i> Send';
+body += '              </button>';
+body += '            </form>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+body += '<script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>';
+body += '<script>';
+body += '  const socket = io();';
+body += '  const chatId = "' + chat._id + '";';
+body += '  const currentUserId = "' + currentUserId + '";';
+body += '  socket.emit("join-chat", chatId);';
+body += '  function scrollToBottom() {';
+body += '    const container = document.getElementById("messagesContainer");';
+body += '    container.scrollTop = container.scrollHeight;';
+body += '  }';
+body += '  scrollToBottom();';
+body += '  socket.on("new-message", (data) => {';
+body += '    const isMine = data.senderId === currentUserId;';
+body += '    const justifyClass = isMine ? "justify-content-end" : "justify-content-start";';
+body += '    const bgColor = isMine ? "var(--primary-gradient)" : "rgba(30, 41, 59, 0.8)";';
+body += '    const textAlign = isMine ? "text-end" : "";';
+body += '    const messageHtml = `<div class="mb-3 d-flex ${justifyClass}"><div style="max-width: 70%;"><div class="p-3 rounded" style="background: ${bgColor}; color: white;">${data.message}</div><small class="text-muted d-block mt-1 ${textAlign}">${new Date(data.timestamp).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</small></div></div>`;';
+body += '    document.getElementById("messagesContainer").innerHTML += messageHtml;';
+body += '    scrollToBottom();';
+body += '  });';
+body += '  document.getElementById("messageForm").addEventListener("submit", (e) => {';
+body += '    e.preventDefault();';
+body += '    const input = document.getElementById("messageInput");';
+body += '    const message = input.value.trim();';
+body += '    if (message) {';
+body += '      socket.emit("send-message", { chatId: chatId, senderId: currentUserId, message: message });';
+body += '      input.value = "";';
+body += '    }';
+body += '  });';
+body += '</script>';
+%>
+    <%- include('layout', { user, body }) %>

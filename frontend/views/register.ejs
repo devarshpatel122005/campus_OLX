@@ -1,0 +1,253 @@
+<% const user=null; const body=` <div class="container">
+  <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6">
+      <div class="card p-4">
+        <div class="card-body">
+          <h2 class="text-center mb-4">
+            <i class="bi bi-person-plus brand-gradient"></i>
+            <span class="brand-gradient">Create Account</span>
+          </h2>
+
+          <div id="registerMessage"></div>
+
+          <form id="registerForm">
+            <!-- Email Input -->
+            <div class="mb-3">
+              <label class="form-label">
+                <i class="bi bi-envelope"></i> College Email
+              </label>
+              <input type="email" class="form-control" id="email" placeholder="yourname@gcet.ac.in" required />
+              <div class="form-text">Must end with @gcet.ac.in</div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-3">
+              <label class="form-label">
+                <i class="bi bi-lock"></i> Password
+              </label>
+              <input type="password" class="form-control" id="password" placeholder="Minimum 6 characters" minlength="6"
+                required />
+            </div>
+
+            <!-- Send OTP Button -->
+            <button type="button" class="btn btn-outline-primary w-100 mb-3" id="sendOtpBtn">
+              <i class="bi bi-send"></i> Send Verification Code
+            </button>
+
+            <!-- OTP Input (Hidden Initially) -->
+            <div id="otpSection" style="display: none;">
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="bi bi-shield-check"></i> Verification Code
+                </label>
+                <input type="text" class="form-control" id="otp" placeholder="Enter 6-digit code" maxlength="6" />
+                <div class="form-text">Check your email for the verification code</div>
+              </div>
+
+              <!-- Verify OTP Button -->
+              <button type="button" class="btn btn-success w-100 mb-3" id="verifyOtpBtn">
+                <i class="bi bi-check-circle"></i> Verify Code
+              </button>
+            </div>
+
+            <!-- Register Button (Disabled Until Verified) -->
+            <button type="submit" class="btn btn-gradient w-100 py-2" id="registerBtn" disabled>
+              <i class="bi bi-person-plus"></i> Complete Registration
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p class="text-muted">
+              Already have an account?
+              <a href="/login" class="text-decoration-none" style="color: #667eea;">Login here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    let otpVerified = false;
+    let currentEmail = '';
+    let currentOtp = '';
+
+    // Send OTP
+    document.getElementById('sendOtpBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const messageDiv = document.getElementById('registerMessage');
+      const sendBtn = document.getElementById('sendOtpBtn');
+
+      if (!email || !/^[^\\s@]+@gcet\\.ac\\.in$/.test(email)) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Please enter a valid @gcet.ac.in email
+          </div>
+        \`;
+        return;
+      }
+      
+      currentEmail = email;
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+      
+      try {
+        const response = await fetch('/api/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Verification code sent! Check your email.
+            </div>
+          \`;
+          document.getElementById('otpSection').style.display = 'block';
+          document.getElementById('email').disabled = true;
+        } else {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-danger">
+              <i class="bi bi-x-circle"></i> \${data.message}
+            </div>
+          \`;
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = '<i class="bi bi-send"></i> Send Verification Code';
+        }
+      } catch (error) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-danger">
+            <i class="bi bi-x-circle"></i> Connection error. Please try again.
+          </div>
+        \`;
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = '<i class="bi bi-send"></i> Send Verification Code';
+      }
+    });
+    
+    // Verify OTP
+    document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
+      const otp = document.getElementById('otp').value;
+      const messageDiv = document.getElementById('registerMessage');
+      const verifyBtn = document.getElementById('verifyOtpBtn');
+      
+      if (!otp || otp.length !== 6) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Please enter the 6-digit code
+          </div>
+        \`;
+        return;
+      }
+      
+      currentOtp = otp;
+      verifyBtn.disabled = true;
+      verifyBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Verifying...';
+      
+      try {
+        const response = await fetch('/api/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, otp })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          otpVerified = true;
+          messageDiv.innerHTML = \`
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Email verified! You can now complete registration.
+            </div>
+          \`;
+          document.getElementById('registerBtn').disabled = false;
+          document.getElementById('otp').disabled = true;
+          verifyBtn.disabled = true;
+          verifyBtn.innerHTML = '<i class="bi bi-check-circle"></i> Verified!';
+        } else {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-danger">
+              <i class="bi bi-x-circle"></i> \${data.message}
+            </div>
+          \`;
+          verifyBtn.disabled = false;
+          verifyBtn.innerHTML = '<i class="bi bi-check-circle"></i> Verify Code';
+        }
+      } catch (error) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-danger">
+            <i class="bi bi-x-circle"></i> Verification failed. Please try again.
+          </div>
+        \`;
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = '<i class="bi bi-check-circle"></i> Verify Code';
+      }
+    });
+    
+    // Register
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!otpVerified) {
+        document.getElementById('registerMessage').innerHTML = \`
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Please verify your email first
+          </div>
+        \`;
+        return;
+      }
+      
+      const password = document.getElementById('password').value;
+      const registerBtn = document.getElementById('registerBtn');
+      const messageDiv = document.getElementById('registerMessage');
+      
+      registerBtn.disabled = true;
+      registerBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Creating account...';
+      
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            email: currentEmail, 
+            password,
+            otp: currentOtp
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle"></i> Account created! Redirecting to login...
+            </div>
+          \`;
+          setTimeout(() => window.location.href = '/login', 2000);
+        } else {
+          messageDiv.innerHTML = \`
+            <div class="alert alert-danger">
+              <i class="bi bi-x-circle"></i> \${data.message}
+            </div>
+          \`;
+          registerBtn.disabled = false;
+          registerBtn.innerHTML = '<i class="bi bi-person-plus"></i> Complete Registration';
+        }
+      } catch (error) {
+        messageDiv.innerHTML = \`
+          <div class="alert alert-danger">
+            <i class="bi bi-x-circle"></i> Registration failed. Please try again.
+          </div>
+        \`;
+        registerBtn.disabled = false;
+        registerBtn.innerHTML = '<i class="bi bi-person-plus"></i> Complete Registration';
+      }
+    });
+  </script>
+  `;
+  %>
+  <%- include('layout', { user, body }) %>

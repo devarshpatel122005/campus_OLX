@@ -1,0 +1,270 @@
+<%
+var body = '';
+body += '<div class="container py-5">';
+
+// Hero Section
+body += '  <div class="row text-center mb-5">';
+body += '    <div class="col-12" data-aos="fade-up">';
+body += '      <div class="badge badge-gradient mb-3 px-3 py-2">';
+body += '        <i class="bi bi-shield-check"></i> Safety First';
+body += '      </div>';
+body += '      <h1 class="display-4 fw-bold mb-4">Stay Safe on CampusHub Pro</h1>';
+body += '      <p class="lead text-muted">Your safety is our top priority. Follow these guidelines for secure trading.</p>';
+body += '    </div>';
+body += '  </div>';
+
+// Safety Tips Grid
+body += '  <div class="row g-4 mb-5">';
+var safetyTips = [
+    { 
+        icon: 'bi-person-check', 
+        title: 'Verify Users', 
+        desc: 'Only trade with verified college students. Check for the verification badge.',
+        tips: ['Look for the verified badge', 'Check college email domain', 'Ask for student ID if needed']
+    },
+    { 
+        icon: 'bi-geo-alt', 
+        title: 'Meet Safely', 
+        desc: 'Always meet in public, well-lit areas on campus during daytime.',
+        tips: ['Campus library or cafeteria', 'Bring a friend if possible', 'Avoid isolated locations']
+    },
+    { 
+        icon: 'bi-cash-stack', 
+        title: 'Secure Payments', 
+        desc: 'Use safe payment methods and never share financial information.',
+        tips: ['Cash for in-person trades', 'UPI for digital payments', 'Never share bank details']
+    },
+    { 
+        icon: 'bi-chat-square-dots', 
+        title: 'Keep Communication On-Platform', 
+        desc: 'Use our built-in chat system to maintain a record of conversations.',
+        tips: ['Use CampusHub Pro chat', 'Keep transaction records', 'Report suspicious behavior']
+    },
+    { 
+        icon: 'bi-eye', 
+        title: 'Inspect Before Buying', 
+        desc: 'Always examine items carefully before completing the purchase.',
+        tips: ['Check item condition', 'Test electronics if possible', 'Compare with listing photos']
+    },
+    { 
+        icon: 'bi-exclamation-triangle', 
+        title: 'Trust Your Instincts', 
+        desc: 'If something feels wrong, don\'t proceed with the transaction.',
+        tips: ['Listen to your gut feeling', 'Don\'t rush decisions', 'Ask questions if unsure']
+    }
+];
+
+for (var i = 0; i < safetyTips.length; i++) {
+    var tip = safetyTips[i];
+    body += '    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 100) + '">';
+    body += '      <div class="card glass h-100 p-4 safety-card">';
+    body += '        <div class="safety-icon mb-3">';
+    body += '          <i class="' + tip.icon + '"></i>';
+    body += '        </div>';
+    body += '        <h5 class="mb-3">' + tip.title + '</h5>';
+    body += '        <p class="text-muted mb-3">' + tip.desc + '</p>';
+    body += '        <ul class="list-unstyled mt-auto">';
+    for (var j = 0; j < tip.tips.length; j++) {
+        body += '          <li class="mb-1">';
+        body += '            <i class="bi bi-check-circle-fill text-success me-2"></i>';
+        body += '            <small>' + tip.tips[j] + '</small>';
+        body += '          </li>';
+    }
+    body += '        </ul>';
+    body += '      </div>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+// Red Flags Section
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center mb-4" data-aos="fade-up">';
+body += '      <h2 class="display-6 fw-bold mb-3">🚩 Red Flags to Watch Out For</h2>';
+body += '      <p class="text-muted">Be cautious if you encounter any of these warning signs</p>';
+body += '    </div>';
+body += '  </div>';
+
+body += '  <div class="row g-4 mb-5">';
+var redFlags = [
+    'Asking for payment before meeting',
+    'Refusing to meet in public places',
+    'Pressuring you to decide quickly',
+    'Prices that seem too good to be true',
+    'Asking for personal financial information',
+    'Unverified accounts with no history',
+    'Requesting to move conversation off-platform',
+    'Avoiding video calls or phone conversations'
+];
+
+for (var i = 0; i < redFlags.length; i++) {
+    body += '    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 50) + '">';
+    body += '      <div class="card glass p-3 red-flag-card">';
+    body += '        <div class="d-flex align-items-center gap-3">';
+    body += '          <div class="red-flag-icon">';
+    body += '            <i class="bi bi-exclamation-triangle-fill"></i>';
+    body += '          </div>';
+    body += '          <div>';
+    body += '            <small class="fw-medium">' + redFlags[i] + '</small>';
+    body += '          </div>';
+    body += '        </div>';
+    body += '      </div>';
+    body += '    </div>';
+}
+body += '  </div>';
+
+// Emergency Section
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-5 text-center emergency-card" data-aos="zoom-in">';
+body += '        <div class="row align-items-center">';
+body += '          <div class="col-lg-8">';
+body += '            <h3 class="mb-3 text-danger">⚠️ In Case of Emergency</h3>';
+body += '            <p class="text-muted mb-4">If you feel unsafe or encounter suspicious activity, take immediate action</p>';
+body += '            <div class="row g-3 text-start">';
+body += '              <div class="col-md-6">';
+body += '                <div class="d-flex align-items-center gap-2 mb-2">';
+body += '                  <i class="bi bi-telephone-fill text-danger"></i>';
+body += '                  <strong>Campus Security: 100</strong>';
+body += '                </div>';
+body += '                <div class="d-flex align-items-center gap-2">';
+body += '                  <i class="bi bi-shield-exclamation text-warning"></i>';
+body += '                  <strong>Police: 100</strong>';
+body += '                </div>';
+body += '              </div>';
+body += '              <div class="col-md-6">';
+body += '                <div class="d-flex align-items-center gap-2 mb-2">';
+body += '                  <i class="bi bi-flag-fill text-info"></i>';
+body += '                  <strong>Report on Platform</strong>';
+body += '                </div>';
+body += '                <div class="d-flex align-items-center gap-2">';
+body += '                  <i class="bi bi-envelope-fill text-primary"></i>';
+body += '                  <strong>Email: safety@campushub.pro</strong>';
+body += '                </div>';
+body += '              </div>';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-lg-4">';
+body += '            <button class="btn btn-danger btn-lg mb-2" onclick="reportIssue()">';
+body += '              <i class="bi bi-exclamation-triangle me-2"></i>Report Issue';
+body += '            </button>';
+body += '            <br>';
+body += '            <a href="/contact" class="btn btn-outline-light">';
+body += '              <i class="bi bi-headset me-2"></i>Contact Support';
+body += '            </a>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Safety Checklist
+body += '  <div class="row">';
+body += '    <div class="col-lg-8 mx-auto">';
+body += '      <div class="card glass-strong p-5" data-aos="fade-up">';
+body += '        <h3 class="text-center mb-4">📋 Pre-Meeting Safety Checklist</h3>';
+body += '        <div class="row g-4">';
+body += '          <div class="col-md-6">';
+body += '            <h6 class="mb-3">Before You Meet:</h6>';
+body += '            <div class="checklist">';
+var beforeMeeting = [
+    'Verify the seller\'s identity',
+    'Choose a public meeting spot',
+    'Tell someone where you\'re going',
+    'Bring a friend if possible',
+    'Have the exact change ready'
+];
+for (var i = 0; i < beforeMeeting.length; i++) {
+    body += '              <div class="form-check mb-2">';
+    body += '                <input class="form-check-input" type="checkbox" id="before' + i + '">';
+    body += '                <label class="form-check-label" for="before' + i + '">';
+    body += '                  ' + beforeMeeting[i];
+    body += '                </label>';
+    body += '              </div>';
+}
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-md-6">';
+body += '            <h6 class="mb-3">During the Meeting:</h6>';
+body += '            <div class="checklist">';
+var duringMeeting = [
+    'Stay in public areas',
+    'Inspect the item thoroughly',
+    'Trust your instincts',
+    'Keep the transaction simple',
+    'Get a receipt if needed'
+];
+for (var i = 0; i < duringMeeting.length; i++) {
+    body += '              <div class="form-check mb-2">';
+    body += '                <input class="form-check-input" type="checkbox" id="during' + i + '">';
+    body += '                <label class="form-check-label" for="during' + i + '">';
+    body += '                  ' + duringMeeting[i];
+    body += '                </label>';
+    body += '              </div>';
+}
+body += '            </div>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+body += '</div>';
+
+body += '<style>';
+body += '.safety-card {';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.safety-card:hover {';
+body += '  transform: translateY(-5px);';
+body += '  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);';
+body += '}';
+body += '.safety-icon {';
+body += '  width: 70px;';
+body += '  height: 70px;';
+body += '  border-radius: 50%;';
+body += '  background: var(--success-gradient);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  color: white;';
+body += '  font-size: 1.8rem;';
+body += '}';
+body += '.red-flag-card {';
+body += '  border-left: 4px solid #e74c3c;';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.red-flag-card:hover {';
+body += '  transform: translateX(5px);';
+body += '}';
+body += '.red-flag-icon {';
+body += '  width: 40px;';
+body += '  height: 40px;';
+body += '  border-radius: 50%;';
+body += '  background: rgba(231, 76, 60, 0.1);';
+body += '  display: flex;';
+body += '  align-items: center;';
+body += '  justify-content: center;';
+body += '  color: #e74c3c;';
+body += '  flex-shrink: 0;';
+body += '}';
+body += '.emergency-card {';
+body += '  border: 2px solid rgba(231, 76, 60, 0.3);';
+body += '}';
+body += '.checklist .form-check-input:checked {';
+body += '  background-color: #10b981;';
+body += '  border-color: #10b981;';
+body += '}';
+body += '</style>';
+
+body += '<script>';
+body += 'function reportIssue() {';
+body += '  if (confirm("Are you currently in immediate danger?")) {';
+body += '    alert("Please call campus security (100) or police (100) immediately!");';
+body += '  } else {';
+body += '    window.location.href = "/contact?subject=safety";';
+body += '  }';
+body += '}';
+body += '</script>';
+%>
+
+<%- include('layout', { user: user, body: body }) %>
