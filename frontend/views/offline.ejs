@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Offline - CampusOLX</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --light-bg: #f8fafc;
+      --primary-blue: #3b82f6;
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .offline-container {
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .offline-animation {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 40px;
+    }
+
+    .offline-icon {
+      width: 120px;
+      height: 120px;
+      background: var(--gradient-glass);
+      backdrop-filter: blur(25px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 2;
+      margin: 0 auto;
+    }
+
+    .offline-waves {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .wave {
+      position: absolute;
+      border: 2px solid rgba(100, 116, 139, 0.2);
+      border-radius: 50%;
+      animation: wave-pulse 2s ease-in-out infinite;
+    }
+
+    .wave-1 {
+      width: 140px;
+      height: 140px;
+      animation-delay: 0s;
+    }
+
+    .wave-2 {
+      width: 180px;
+      height: 180px;
+      animation-delay: 0.5s;
+    }
+
+    .wave-3 {
+      width: 220px;
+      height: 220px;
+      animation-delay: 1s;
+    }
+
+    @keyframes wave-pulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+    }
+
+    .offline-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offline-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .offline-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-blue);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .offline-content {
+      background: var(--gradient-glass);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+
+    .offline-content h3 {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cached-item {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .cached-item:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .cached-item h6 {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .cached-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .cached-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cached-price {
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cached-category {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--primary-blue);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .retry-btn {
+      background: var(--gradient-primary);
+      color: var(--text-dark);
+      border: none;
+      padding: 16px 32px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.4s ease;
+      box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .retry-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 35px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .retry-btn i {
+      font-size: 1.2rem;
+      animation: spin-slow 2s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .offline-stats {
+        gap: 24px;
+      }
+      
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.3rem;
+      }
+      
+      .offline-title {
+        font-size: 1.6rem;
+      }
+      
+      .offline-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+      }
+      
+      .wave-1 { width: 120px; height: 120px; }
+      .wave-2 { width: 160px; height: 160px; }
+      .wave-3 { width: 200px; height: 200px; }
+    }
+
+    /* Connection Status Indicator */
+    .connection-status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--gradient-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Connection Status -->
+  <div class="connection-status">
+    <div class="status-dot"></div>
+    <span>Offline</span>
+  </div>
+
+  <div class="offline-container">
+    <!-- Animated Offline Icon -->
+    <div class="offline-animation">
+      <div class="offline-icon">
+        <i class="bi bi-wifi-off"></i>
+      </div>
+      <div class="offline-waves">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+      </div>
+    </div>
+
+    <!-- Offline Message -->
+    <h1 class="offline-title">You're Offline</h1>
+    <p class="offline-subtitle">
+      No internet connection detected. Don't worry, you can still browse your saved items and recent activity below.
+    </p>
+
+    <!-- Offline Stats -->
+    <div class="offline-stats">
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="bi bi-bookmark-fill"></i>
+        </div>
+        <div class="stat-value" id="cachedCount">0</div>
+        <div class="stat-label">Saved Items</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="bi bi-clock-history"></i>
+        </div>
+        <div class="stat-value">Recent</div>
+        <div class="stat-label">Activity</div>
+      </div>
+    </div>
+
+    <!-- Cached Content -->
+    <div class="offline-content">
+      <h3>
+        <i class="bi bi-archive"></i>
+        Cached Items
+      </h3>
+      <div id="cachedItems">
+        <!-- Cached items will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Retry Button -->
+    <button class="retry-btn" onclick="checkConnection()">
+      <i class="bi bi-arrow-clockwise"></i>
+      <span>Try Again</span>
+    </button>
+  </div>
+
+  <script>
+    // Load cached items from localStorage
+    function loadCachedItems() {
+      const cachedItems = JSON.parse(localStorage.getItem('cachedItems') || '[]');
+      const cachedCountElement = document.getElementById('cachedCount');
+      const cachedItemsContainer = document.getElementById('cachedItems');
+      
+      if (cachedCountElement) {
+        cachedCountElement.textContent = cachedItems.length;
+      }
+      
+      if (cachedItems.length > 0) {
+        cachedItemsContainer.innerHTML = cachedItems.slice(0, 5).map(item => `
+          <div class="cached-item">
+            <h6>${item.title}</h6>
+            <p>${item.description.length > 80 ? item.description.substring(0, 80) + '...' : item.description}</p>
+            <div class="cached-meta">
+              <span class="cached-price">₹${item.price}</span>
+              <span class="cached-category">${item.category}</span>
+            </div>
+          </div>
+        `).join('');
+        
+        if (cachedItems.length > 5) {
+          cachedItemsContainer.innerHTML += `
+            <div class="text-center mt-3">
+              <small style="color: var(--text-muted);">
+                +${cachedItems.length - 5} more items cached
+              </small>
+            </div>
+          `;
+        }
+      } else {
+        cachedItemsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>No cached items available</p>
+            <small>Items you view will be saved for offline access</small>
+          </div>
+        `;
+      }
+    }
+
+    // Check connection and redirect if online
+    function checkConnection() {
+      if (navigator.onLine) {
+        // Update status indicator
+        const statusDot = document.querySelector('.status-dot');
+        const statusText = document.querySelector('.connection-status span');
+        
+        statusDot.style.background = '#10b981';
+        statusText.textContent = 'Online';
+        
+        // Redirect to home after a brief delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      } else {
+        // Show feedback that we're still offline
+        const retryBtn = document.querySelector('.retry-btn');
+        const originalText = retryBtn.innerHTML;
+        
+        retryBtn.innerHTML = '<i class="bi bi-x-circle"></i><span>Still Offline</span>';
+        retryBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+        
+        setTimeout(() => {
+          retryBtn.innerHTML = originalText;
+          retryBtn.style.background = 'var(--gradient-primary)';
+        }, 2000);
+      }
+    }
+
+    // Listen for online/offline events
+    window.addEventListener('online', () => {
+      const statusDot = document.querySelector('.status-dot');
+      const statusText = document.querySelector('.connection-status span');
+      
+      statusDot.style.background = '#10b981';
+      statusDot.style.animation = 'none';
+      statusText.textContent = 'Back Online';
+      
+      // Auto-redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    });
+
+    window.addEventListener('offline', () => {
+      const statusDot = document.querySelector('.status-dot');
+      const statusText = document.querySelector('.connection-status span');
+      
+      statusDot.style.background = '#ef4444';
+      statusDot.style.animation = 'pulse-dot 2s ease-in-out infinite';
+      statusText.textContent = 'Offline';
+    });
+
+    // Load cached items on page load
+    document.addEventListener('DOMContentLoaded', loadCachedItems);
+
+    // Periodically check connection
+    setInterval(() => {
+      if (navigator.onLine) {
+        checkConnection();
+      }
+    }, 5000);
+
+    // Add some interactivity to cached items
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.cached-item')) {
+        const item = e.target.closest('.cached-item');
+        item.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          item.style.transform = 'translateY(-2px)';
+        }, 150);
+      }
+    });
+
+    // Haptic feedback for mobile
+    if ('vibrate' in navigator) {
+      document.querySelector('.retry-btn').addEventListener('click', () => {
+        navigator.vibrate(50);
+      });
+    }
+  </script>
+</body>
+</html>

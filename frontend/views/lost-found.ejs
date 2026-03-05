@@ -1,0 +1,420 @@
+<%
+var body = '';
+body += '<div class="container py-4">';
+
+// Hero Section
+body += '  <div class="row mb-5">';
+body += '    <div class="col-12 text-center" data-aos="fade-up">';
+body += '      <div class="dashboard-hero glass-strong position-relative py-5 mb-4">';
+body += '        <div class="badge badge-gradient mb-4 px-4 py-3 pulse-glow">';
+body += '          <i class="bi bi-search-heart me-2"></i>Lost & Found';
+body += '        </div>';
+body += '        <h1 class="display-4 fw-bold mb-4">';
+body += '          <span class="text-gradient-hero">Find Your</span><br>';
+body += '          <span class="text-gradient-accent">Lost Items</span>';
+body += '        </h1>';
+body += '        <p class="lead text-light-gray mb-0 fs-4">Help fellow students recover their lost belongings</p>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Action Buttons
+body += '  <div class="row mb-4">';
+body += '    <div class="col-12 text-center">';
+body += '      <div class="d-flex flex-wrap gap-3 justify-content-center">';
+body += '        <button class="btn btn-gradient" data-bs-toggle="modal" data-bs-target="#reportLostModal">';
+body += '          <i class="bi bi-exclamation-triangle me-2"></i>Report Lost Item';
+body += '        </button>';
+body += '        <button class="btn btn-secondary-gradient" data-bs-toggle="modal" data-bs-target="#reportFoundModal">';
+body += '          <i class="bi bi-check-circle me-2"></i>Report Found Item';
+body += '        </button>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Search and Filter Section
+body += '  <div class="row mb-4">';
+body += '    <div class="col-12">';
+body += '      <div class="card glass-strong p-3">';
+body += '        <div class="row g-3">';
+body += '          <div class="col-lg-4">';
+body += '            <div class="input-group">';
+body += '              <span class="input-group-text border-0 bg-transparent">';
+body += '                <i class="bi bi-search text-electric-blue"></i>';
+body += '              </span>';
+body += '              <input type="text" id="searchInput" class="form-control border-0 bg-transparent" placeholder="Search items..." value="' + (filters.search || '') + '">';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="col-lg-3">';
+body += '            <select id="categoryFilter" class="form-select">';
+body += '              <option value="all"' + (!filters.category || filters.category === 'all' ? ' selected' : '') + '>All Categories</option>';
+body += '              <option value="📱 Mobiles & Gadgets"' + (filters.category === '📱 Mobiles & Gadgets' ? ' selected' : '') + '>📱 Mobiles & Gadgets</option>';
+body += '              <option value="📚 Books & Quantums"' + (filters.category === '📚 Books & Quantums' ? ' selected' : '') + '>📚 Books & Quantums</option>';
+body += '              <option value="🎒 Bags & Luggage"' + (filters.category === '🎒 Bags & Luggage' ? ' selected' : '') + '>🎒 Bags & Luggage</option>';
+body += '              <option value="📐 Engineering Tools"' + (filters.category === '📐 Engineering Tools' ? ' selected' : '') + '>📐 Engineering Tools</option>';
+body += '              <option value="Keys"' + (filters.category === 'Keys' ? ' selected' : '') + '>Keys</option>';
+body += '              <option value="ID Cards"' + (filters.category === 'ID Cards' ? ' selected' : '') + '>ID Cards</option>';
+body += '              <option value="Documents"' + (filters.category === 'Documents' ? ' selected' : '') + '>Documents</option>';
+body += '              <option value="⚡ Electronics & Components"' + (filters.category === '⚡ Electronics & Components' ? ' selected' : '') + '>⚡ Electronics & Components</option>';
+body += '              <option value="Other"' + (filters.category === 'Other' ? ' selected' : '') + '>Other</option>';
+body += '            </select>';
+body += '          </div>';
+body += '          <div class="col-lg-3">';
+body += '            <select id="typeFilter" class="form-select">';
+body += '              <option value="all"' + (!filters.type || filters.type === 'all' ? ' selected' : '') + '>All Items</option>';
+body += '              <option value="lost"' + (filters.type === 'lost' ? ' selected' : '') + '>Lost Items</option>';
+body += '              <option value="found"' + (filters.type === 'found' ? ' selected' : '') + '>Found Items</option>';
+body += '            </select>';
+body += '          </div>';
+body += '          <div class="col-lg-2">';
+body += '            <button class="btn btn-outline-light w-100" onclick="applyFilters()">';
+body += '              <i class="bi bi-funnel me-2"></i>Filter';
+body += '            </button>';
+body += '          </div>';
+body += '        </div>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+
+// Items Grid
+body += '  <div class="row g-4" id="itemsGrid">';
+
+if (lostFoundItems && lostFoundItems.length > 0) {
+    for (var i = 0; i < lostFoundItems.length; i++) {
+        var item = lostFoundItems[i];
+        var badgeClass = item.type === 'lost' ? 'bg-danger' : 'bg-success';
+        var badgeText = item.type === 'lost' ? 'LOST' : 'FOUND';
+        var timeAgo = new Date(item.dateReported).toLocaleDateString();
+        
+        body += '    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="' + (i * 100) + '">';
+        body += '      <div class="card lost-found-card h-100">';
+        
+        // Image section
+        if (item.images && item.images.length > 0) {
+            body += '        <div class="card-img-container">';
+            body += '          <img src="' + item.images[0] + '" class="card-img-top" alt="' + item.title + '">';
+            body += '        </div>';
+        }
+        
+        body += '        <div class="card-body">';
+        body += '          <div class="d-flex justify-content-between align-items-start mb-3">';
+        body += '            <span class="badge ' + badgeClass + '">' + badgeText + '</span>';
+        body += '            <small class="text-muted">' + timeAgo + '</small>';
+        body += '          </div>';
+        body += '          <h5 class="card-title text-dark mb-2">' + item.title + '</h5>';
+        body += '          <p class="card-text text-light-gray mb-3">' + item.description.substring(0, 100) + (item.description.length > 100 ? '...' : '') + '</p>';
+        body += '          <div class="d-flex align-items-center mb-2">';
+        body += '            <i class="bi bi-geo-alt text-electric-blue me-2"></i>';
+        body += '            <small class="text-light-gray">' + item.location + '</small>';
+        body += '          </div>';
+        body += '          <div class="d-flex align-items-center mb-3">';
+        body += '            <i class="bi bi-tag text-electric-blue me-2"></i>';
+        body += '            <small class="text-light-gray">' + item.category + '</small>';
+        body += '          </div>';
+        body += '          <div class="d-flex gap-2">';
+        body += '            <button class="btn btn-outline-light btn-sm flex-fill" onclick="contactOwner(\'' + item._id + '\', \'' + item.contactInfo + '\')">';
+        body += '              <i class="bi bi-chat-dots me-2"></i>Contact';
+        body += '            </button>';
+        if (item.userId._id === user._id) {
+            body += '            <button class="btn btn-success btn-sm" onclick="markResolved(\'' + item._id + '\')">';
+            body += '              <i class="bi bi-check"></i>';
+            body += '            </button>';
+        }
+        body += '          </div>';
+        body += '        </div>';
+        body += '      </div>';
+        body += '    </div>';
+    }
+} else {
+    body += '    <div class="col-12 text-center py-5">';
+    body += '      <i class="bi bi-search fs-1 text-muted mb-3"></i>';
+    body += '      <h4 class="text-light-gray">No items found</h4>';
+    body += '      <p class="text-muted">Be the first to report a lost or found item!</p>';
+    body += '    </div>';
+}
+
+body += '  </div>';
+body += '</div>';
+
+// Report Lost Item Modal
+body += '<div class="modal fade" id="reportLostModal" tabindex="-1">';
+body += '  <div class="modal-dialog">';
+body += '    <div class="modal-content glass-strong" style="background: rgba(255, 255, 255, 0.95) !important;">';
+body += '      <div class="modal-header border-0">';
+body += '        <h5 class="modal-title" style="color: #1e293b !important;">Report Lost Item</h5>';
+body += '        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>';
+body += '      </div>';
+body += '      <div class="modal-body">';
+body += '        <form id="lostItemForm">';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Item Name *</label>';
+body += '            <input type="text" name="title" class="form-control" placeholder="What did you lose?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Description *</label>';
+body += '            <textarea name="description" class="form-control" rows="3" placeholder="Describe your lost item..." required style="color: #1e293b;"></textarea>';
+body += '          </div>';
+body += '          <div class="row">';
+body += '            <div class="col-md-6 mb-3">';
+body += '              <label class="form-label" style="color: #1e293b; font-weight: 600;">Category</label>';
+body += '              <select name="category" class="form-select" style="color: #1e293b;">';
+body += '                <option value="Electronics">Electronics</option>';
+body += '                <option value="Books">Books</option>';
+body += '                <option value="Clothing">Clothing</option>';
+body += '                <option value="Accessories">Accessories</option>';
+body += '                <option value="Keys">Keys</option>';
+body += '                <option value="Documents">Documents</option>';
+body += '                <option value="Other" selected>Other</option>';
+body += '              </select>';
+body += '            </div>';
+body += '            <div class="col-md-6 mb-3">';
+body += '              <label class="form-label" style="color: #1e293b; font-weight: 600;">When did you lose it?</label>';
+body += '              <input type="date" name="dateIncident" class="form-control" required style="color: #1e293b;">';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Last Seen Location *</label>';
+body += '            <input type="text" name="location" class="form-control" placeholder="Where did you last see it?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Contact Information *</label>';
+body += '            <input type="text" name="contactInfo" class="form-control" placeholder="How can we reach you?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Upload Images</label>';
+body += '            <input type="file" name="images" class="form-control" multiple accept="image/*" style="color: #1e293b;">';
+body += '            <small style="color: #64748b;">Upload up to 5 images</small>';
+body += '          </div>';
+body += '        </form>';
+body += '      </div>';
+body += '      <div class="modal-footer border-0">';
+body += '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>';
+body += '        <button type="button" class="btn btn-gradient" onclick="submitLostItem()">Report Lost Item</button>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+// Report Found Item Modal
+body += '<div class="modal fade" id="reportFoundModal" tabindex="-1">';
+body += '  <div class="modal-dialog">';
+body += '    <div class="modal-content glass-strong" style="background: rgba(255, 255, 255, 0.95) !important;">';
+body += '      <div class="modal-header border-0">';
+body += '        <h5 class="modal-title" style="color: #1e293b !important;">Report Found Item</h5>';
+body += '        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>';
+body += '      </div>';
+body += '      <div class="modal-body">';
+body += '        <form id="foundItemForm">';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Item Name *</label>';
+body += '            <input type="text" name="title" class="form-control" placeholder="What did you find?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Description *</label>';
+body += '            <textarea name="description" class="form-control" rows="3" placeholder="Describe the found item..." required style="color: #1e293b;"></textarea>';
+body += '          </div>';
+body += '          <div class="row">';
+body += '            <div class="col-md-6 mb-3">';
+body += '              <label class="form-label" style="color: #1e293b; font-weight: 600;">Category</label>';
+body += '              <select name="category" class="form-select" style="color: #1e293b;">';
+body += '                <option value="Electronics">Electronics</option>';
+body += '                <option value="Books">Books</option>';
+body += '                <option value="Clothing">Clothing</option>';
+body += '                <option value="Accessories">Accessories</option>';
+body += '                <option value="Keys">Keys</option>';
+body += '                <option value="Documents">Documents</option>';
+body += '                <option value="Other" selected>Other</option>';
+body += '              </select>';
+body += '            </div>';
+body += '            <div class="col-md-6 mb-3">';
+body += '              <label class="form-label" style="color: #1e293b; font-weight: 600;">When did you find it?</label>';
+body += '              <input type="date" name="dateIncident" class="form-control" required style="color: #1e293b;">';
+body += '            </div>';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Found Location *</label>';
+body += '            <input type="text" name="location" class="form-control" placeholder="Where did you find it?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Contact Information *</label>';
+body += '            <input type="text" name="contactInfo" class="form-control" placeholder="How can the owner reach you?" required style="color: #1e293b;">';
+body += '          </div>';
+body += '          <div class="mb-3">';
+body += '            <label class="form-label" style="color: #1e293b; font-weight: 600;">Upload Images</label>';
+body += '            <input type="file" name="images" class="form-control" multiple accept="image/*" style="color: #1e293b;">';
+body += '            <small style="color: #64748b;">Upload up to 5 images</small>';
+body += '          </div>';
+body += '        </form>';
+body += '      </div>';
+body += '      <div class="modal-footer border-0">';
+body += '        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>';
+body += '        <button type="button" class="btn btn-secondary-gradient" onclick="submitFoundItem()">Report Found Item</button>';
+body += '      </div>';
+body += '    </div>';
+body += '  </div>';
+body += '</div>';
+
+// JavaScript
+body += '<script>';
+body += 'function applyFilters() {';
+body += '  const search = document.getElementById("searchInput").value;';
+body += '  const category = document.getElementById("categoryFilter").value;';
+body += '  const type = document.getElementById("typeFilter").value;';
+body += '  const params = new URLSearchParams();';
+body += '  if (search) params.set("search", search);';
+body += '  if (category !== "all") params.set("category", category);';
+body += '  if (type !== "all") params.set("type", type);';
+body += '  window.location.href = "/lost-found?" + params.toString();';
+body += '}';
+
+body += 'function contactOwner(itemId, contactInfo) {';
+body += '  alert("Contact Information:\\n" + contactInfo + "\\n\\nPlease reach out to discuss the item.");';
+body += '}';
+
+body += 'function markResolved(itemId) {';
+body += '  if (confirm("Mark this item as resolved? This action cannot be undone.")) {';
+body += '    fetch(`/api/lost-found/${itemId}/resolve`, {';
+body += '      method: "PATCH",';
+body += '      headers: { "Content-Type": "application/json" }';
+body += '    })';
+body += '    .then(response => response.json())';
+body += '    .then(data => {';
+body += '      if (data.success) {';
+body += '        alert("Item marked as resolved!");';
+body += '        location.reload();';
+body += '      } else {';
+body += '        alert("Error: " + data.message);';
+body += '      }';
+body += '    })';
+body += '    .catch(error => {';
+body += '      console.error("Error:", error);';
+body += '      alert("Failed to mark item as resolved");';
+body += '    });';
+body += '  }';
+body += '}';
+
+body += 'function submitLostItem() {';
+body += '  const form = document.getElementById("lostItemForm");';
+body += '  const formData = new FormData(form);';
+body += '  formData.append("type", "lost");';
+body += '  ';
+body += '  fetch("/api/lost-found", {';
+body += '    method: "POST",';
+body += '    body: formData';
+body += '  })';
+body += '  .then(response => response.json())';
+body += '  .then(data => {';
+body += '    if (data.success) {';
+body += '      alert("Lost item reported successfully!");';
+body += '      bootstrap.Modal.getInstance(document.getElementById("reportLostModal")).hide();';
+body += '      location.reload();';
+body += '    } else {';
+body += '      alert("Error: " + data.message);';
+body += '    }';
+body += '  })';
+body += '  .catch(error => {';
+body += '    console.error("Error:", error);';
+body += '    alert("Failed to report lost item");';
+body += '  });';
+body += '}';
+
+body += 'function submitFoundItem() {';
+body += '  const form = document.getElementById("foundItemForm");';
+body += '  const formData = new FormData(form);';
+body += '  formData.append("type", "found");';
+body += '  ';
+body += '  fetch("/api/lost-found", {';
+body += '    method: "POST",';
+body += '    body: formData';
+body += '  })';
+body += '  .then(response => response.json())';
+body += '  .then(data => {';
+body += '    if (data.success) {';
+body += '      alert("Found item reported successfully!");';
+body += '      bootstrap.Modal.getInstance(document.getElementById("reportFoundModal")).hide();';
+body += '      location.reload();';
+body += '    } else {';
+body += '      alert("Error: " + data.message);';
+body += '    }';
+body += '  })';
+body += '  .catch(error => {';
+body += '    console.error("Error:", error);';
+body += '    alert("Failed to report found item");';
+body += '  });';
+body += '}';
+
+// Search on Enter key
+body += 'document.getElementById("searchInput").addEventListener("keypress", function(e) {';
+body += '  if (e.key === "Enter") applyFilters();';
+body += '});';
+
+// Set default date to today
+body += 'document.addEventListener("DOMContentLoaded", function() {';
+body += '  const today = new Date().toISOString().split("T")[0];';
+body += '  document.querySelectorAll("input[type=date]").forEach(input => {';
+body += '    if (!input.value) input.value = today;';
+body += '  });';
+body += '});';
+
+body += '</script>';
+
+// Styles
+body += '<style>';
+body += '.dashboard-hero {';
+body += '  border-radius: 25px;';
+body += '  background: var(--card-gradient);';
+body += '  border: 1px solid rgba(59, 130, 246, 0.2);';
+body += '  box-shadow: var(--shadow-glass), var(--glow-blue);';
+body += '}';
+body += '.text-gradient-hero {';
+body += '  background: var(--hero-gradient);';
+body += '  -webkit-background-clip: text;';
+body += '  -webkit-text-fill-color: transparent;';
+body += '  background-clip: text;';
+body += '}';
+body += '.text-gradient-accent {';
+body += '  background: linear-gradient(135deg, var(--cyber-purple) 0%, var(--electric-blue) 100%);';
+body += '  -webkit-background-clip: text;';
+body += '  -webkit-text-fill-color: transparent;';
+body += '  background-clip: text;';
+body += '}';
+body += '.text-light-gray {';
+body += '  color: var(--text-light-gray);';
+body += '}';
+body += '.text-electric-blue {';
+body += '  color: var(--electric-blue);';
+body += '}';
+body += '.lost-found-card {';
+body += '  background: var(--glass-bg);';
+body += '  backdrop-filter: blur(20px);';
+body += '  border: 1px solid var(--glass-border);';
+body += '  border-radius: 20px;';
+body += '  transition: all 0.4s ease;';
+body += '  box-shadow: var(--shadow-glass);';
+body += '}';
+body += '.lost-found-card:hover {';
+body += '  transform: translateY(-8px);';
+body += '  box-shadow: var(--shadow-hover), var(--glow-blue);';
+body += '  border-color: rgba(59, 130, 246, 0.3);';
+body += '}';
+body += '.nav-pills .nav-link {';
+body += '  background: transparent;';
+body += '  border: 1px solid var(--glass-border);';
+body += '  color: var(--text-light-gray);';
+body += '  margin: 0 0.5rem;';
+body += '  border-radius: 25px;';
+body += '  transition: all 0.3s ease;';
+body += '}';
+body += '.nav-pills .nav-link.active {';
+body += '  background: var(--primary-gradient);';
+body += '  color: white;';
+body += '  box-shadow: var(--glow-blue);';
+body += '}';
+body += '.modal-content {';
+body += '  background: rgba(15, 23, 42, 0.95);';
+body += '  border: 1px solid var(--glass-border);';
+body += '  border-radius: 20px;';
+body += '}';
+body += '</style>';
+%>
+    <%- include('layout', { user, body }) %>

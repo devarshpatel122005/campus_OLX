@@ -19,6 +19,8 @@ const Chat = require('./models/Chat');
 const OTP = require('./models/OTP');
 const Wishlist = require('./models/Wishlist');
 const Notification = require('./models/Notification');
+const LostFound = require('./models/LostFound');
+const Auction = require('./models/Auction');
 
 // Initialize Express app
 const app = express();
@@ -103,6 +105,20 @@ const requireVerified = async (req, res, next) => {
     }
 };
 
+// Admin Middleware
+const requireAdmin = async (req, res, next) => {
+    if (req.session.userId) {
+        const user = await User.findById(req.session.userId);
+        if (user && user.isAdmin) {
+            next();
+        } else {
+            res.status(403).json({ success: false, message: 'Access denied. Admin only.' });
+        }
+    } else {
+        res.redirect('/login');
+    }
+};
+
 // ==================== ROUTES ====================
 
 // Home Page
@@ -125,8 +141,8 @@ app.get('/dashboard', requireVerified, async (req, res) => {
     try {
         const { search, category, minPrice, maxPrice, condition, sort } = req.query;
 
-        // Build query
-        let query = { status: 'available' };
+        // Build query - only show approved products
+        let query = { status: 'approved' };
 
         // Search by title or description
         if (search) {
@@ -478,13 +494,18 @@ app.get('/categories', requireVerified, async (req, res) => {
         ]);
 
         const categories = [
-            { name: 'Electronics', icon: 'bi-laptop', description: 'Laptops, phones, gadgets & accessories' },
-            { name: 'Books', icon: 'bi-book', description: 'Textbooks, novels & study materials' },
-            { name: 'Furniture', icon: 'bi-house', description: 'Chairs, tables, storage & decor' },
-            { name: 'Clothing', icon: 'bi-bag', description: 'Fashion, shoes & accessories' },
-            { name: 'Sports', icon: 'bi-trophy', description: 'Equipment, gear & fitness items' },
-            { name: 'Vehicles', icon: 'bi-car-front', description: 'Bikes, scooters & car accessories' },
-            { name: 'Other', icon: 'bi-grid', description: 'Everything else you need' }
+            { name: '📚 Books & Quantums', icon: 'bi-book', description: 'Textbooks, study guides & academic materials' },
+            { name: '📐 Engineering Tools', icon: 'bi-tools', description: 'Drafters, scientific calculators, lab coats' },
+            { name: '📱 Mobiles & Gadgets', icon: 'bi-phone', description: 'Smartphones, tablets & mobile accessories' },
+            { name: '💻 Laptops & Accessories', icon: 'bi-laptop', description: 'Laptops, keyboards, mice & tech accessories' },
+            { name: '🚲 Bicycles & Ride-ons', icon: 'bi-bicycle', description: 'Bikes, scooters, skateboards & accessories' },
+            { name: '🏠 Hostel & PG Essentials', icon: 'bi-house', description: 'Mattresses, buckets, extension boards' },
+            { name: '⚡ Electronics & Components', icon: 'bi-cpu', description: 'Arduino, sensors, Raspberry Pi for projects' },
+            { name: '❄️ Coolers & Fans', icon: 'bi-fan', description: 'High demand cooling solutions for hostels' },
+            { name: '🎒 Bags & Luggage', icon: 'bi-bag', description: 'Backpacks, travel bags & luggage' },
+            { name: '🎸 Hobbies & Music', icon: 'bi-music-note', description: 'Musical instruments, art supplies & hobby items' },
+            { name: '🕵️ Lost & Found', icon: 'bi-search-heart', description: 'Lost and found items on campus' },
+            { name: '🔨 Auction Items', icon: 'bi-hammer', description: 'Bid on exclusive items and deals' }
         ];
 
         // Add counts to categories
@@ -527,28 +548,91 @@ app.get('/how-it-works', (req, res) => {
     res.render('how-it-works', { user });
 });
 
-// Help Center Page
-app.get('/help', (req, res) => {
-    const user = req.session.userId || null;
-    res.render('help', { user });
+// Lost & Found Page
+app.get('/lost-found', requireVerified, async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId);
+        const { type, search, category } = req.query;
+
+        // Build query
+        let query = { status: 'active' };
+        if (type && ['lost', 'found'].includes(type)) {
+            query.type = type;
+        }
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { location: { $regex: search, $options: 'i' } }
+            ];
+        }
+        if (category && category !== 'all') {
+            query.category = category;
+        }
+
+        const lostFoundItems = await LostFound.find(query)
+            .populate('userId', 'email')
+            .sort({ dateReported: -1 })
+            .limit(50);
+
+        res.render('lost-found', { user, lostFoundItems, filters: req.query });
+    } catch (error) {
+        console.error('Lost & Found error:', error);
+        res.status(500).send('Error loading Lost & Found');
+    }
 });
 
-// Contact Page
-app.get('/contact', (req, res) => {
-    const user = req.session.userId || null;
-    res.render('contact', { user });
-});
+// Auctions Page
+app.get('/auctions', requireVerified, async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId);
+        const { filter, search, category } = req.query;
 
-// Safety Tips Page
-app.get('/safety', (req, res) => {
-    const user = req.session.userId || null;
-    res.render('safety', { user });
-});
+        // Build query
+        let query = {};
+        const now = new Date();
 
-// FAQ Page
-app.get('/faq', (req, res) => {
-    const user = req.session.userId || null;
-    res.render('faq', { user });
+        if (filter === 'ending-soon') {
+            const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+            query = {
+                status: 'active',
+                endTime: { $gte: now, $lte: oneHourFromNow }
+            };
+        } else if (filter === 'my-bids') {
+            query = {
+                status: 'active',
+                'bids.userId': req.session.userId
+            };
+        } else {
+            // Default: active auctions
+            query = {
+                status: 'active',
+                endTime: { $gt: now }
+            };
+        }
+
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+        if (category && category !== 'all') {
+            query.category = category;
+        }
+
+        const auctions = await Auction.find(query)
+            .populate('sellerId', 'email')
+            .populate('highestBidder', 'email')
+            .populate('watchers', '_id')
+            .sort({ endTime: 1 })
+            .limit(50);
+
+        res.render('auctions', { user, auctions, filters: req.query });
+    } catch (error) {
+        console.error('Auctions error:', error);
+        res.status(500).send('Error loading Auctions');
+    }
 });
 
 // API: Get wishlist count
@@ -585,7 +669,306 @@ app.post('/api/wishlist/toggle', requireVerified, async (req, res) => {
     }
 });
 
-// ==================== SETTINGS API ENDPOINTS ====================
+// ==================== LOST & FOUND API ====================
+
+// Create Lost/Found Item
+app.post('/api/lost-found', requireVerified, upload.array('images', 5), async (req, res) => {
+    try {
+        const { title, description, type, location, contactInfo, category, dateIncident } = req.body;
+
+        const imagePaths = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+
+        const lostFoundItem = new LostFound({
+            title,
+            description,
+            type,
+            location,
+            contactInfo,
+            category: category || 'Other',
+            dateIncident: dateIncident || new Date(),
+            images: imagePaths,
+            userId: req.session.userId
+        });
+
+        await lostFoundItem.save();
+
+        // Create notification for relevant users (optional)
+        const notificationTitle = type === 'lost' ? 'New Lost Item Reported' : 'New Found Item Reported';
+        const notification = new Notification({
+            userId: req.session.userId, // For now, notify the creator
+            type: 'lost_found',
+            title: notificationTitle,
+            message: `${title} has been reported as ${type}`,
+            link: `/lost-found`
+        });
+        await notification.save();
+
+        res.json({ success: true, message: `${type} item reported successfully`, itemId: lostFoundItem._id });
+    } catch (error) {
+        console.error('Lost & Found creation error:', error);
+        res.status(500).json({ success: false, message: 'Failed to report item' });
+    }
+});
+
+// Get Lost & Found Items
+app.get('/api/lost-found', requireVerified, async (req, res) => {
+    try {
+        const { type, search, category, limit = 20 } = req.query;
+        
+        let query = { status: 'active' };
+        if (type) query.type = type;
+        if (category && category !== 'all') query.category = category;
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { location: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const items = await LostFound.find(query)
+            .populate('userId', 'email')
+            .sort({ dateReported: -1 })
+            .limit(parseInt(limit));
+
+        res.json({ success: true, items });
+    } catch (error) {
+        console.error('Get Lost & Found error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch items' });
+    }
+});
+
+// Mark Lost & Found Item as Resolved
+app.patch('/api/lost-found/:id/resolve', requireVerified, async (req, res) => {
+    try {
+        const item = await LostFound.findById(req.params.id);
+        
+        if (!item) {
+            return res.status(404).json({ success: false, message: 'Item not found' });
+        }
+
+        if (item.userId.toString() !== req.session.userId.toString()) {
+            return res.status(403).json({ success: false, message: 'Unauthorized' });
+        }
+
+        item.status = 'resolved';
+        item.resolved = true;
+        item.resolvedAt = new Date();
+        await item.save();
+
+        res.json({ success: true, message: 'Item marked as resolved' });
+    } catch (error) {
+        console.error('Resolve item error:', error);
+        res.status(500).json({ success: false, message: 'Failed to resolve item' });
+    }
+});
+
+// ==================== AUCTIONS API ====================
+
+// Create Auction
+app.post('/api/auctions', requireVerified, upload.array('images', 5), async (req, res) => {
+    try {
+        const { title, description, startingBid, duration, category, bidIncrement } = req.body;
+
+        const imagePaths = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+        
+        const startTime = new Date();
+        const endTime = new Date(startTime.getTime() + (parseInt(duration) * 60 * 60 * 1000));
+
+        const auction = new Auction({
+            title,
+            description,
+            startingBid: parseFloat(startingBid),
+            bidIncrement: bidIncrement ? parseFloat(bidIncrement) : 5,
+            duration: parseInt(duration),
+            category,
+            images: imagePaths,
+            sellerId: req.session.userId,
+            startTime,
+            endTime
+        });
+
+        await auction.save();
+
+        res.json({ success: true, message: 'Auction created successfully', auctionId: auction._id });
+    } catch (error) {
+        console.error('Auction creation error:', error);
+        res.status(500).json({ success: false, message: 'Failed to create auction' });
+    }
+});
+
+// Get Auctions
+app.get('/api/auctions', requireVerified, async (req, res) => {
+    try {
+        const { filter, search, category, limit = 20 } = req.query;
+        const now = new Date();
+        
+        let query = {};
+        
+        if (filter === 'ending-soon') {
+            const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+            query = {
+                status: 'active',
+                endTime: { $gte: now, $lte: oneHourFromNow }
+            };
+        } else if (filter === 'my-bids') {
+            query = {
+                status: 'active',
+                'bids.userId': req.session.userId
+            };
+        } else {
+            query = {
+                status: 'active',
+                endTime: { $gt: now }
+            };
+        }
+
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+        if (category && category !== 'all') {
+            query.category = category;
+        }
+
+        const auctions = await Auction.find(query)
+            .populate('sellerId', 'email')
+            .populate('highestBidder', 'email')
+            .sort({ endTime: 1 })
+            .limit(parseInt(limit));
+
+        res.json({ success: true, auctions });
+    } catch (error) {
+        console.error('Get auctions error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch auctions' });
+    }
+});
+
+// Place Bid
+app.post('/api/auctions/:id/bid', requireVerified, async (req, res) => {
+    try {
+        const { amount } = req.body;
+        const auction = await Auction.findById(req.params.id);
+
+        if (!auction) {
+            return res.status(404).json({ success: false, message: 'Auction not found' });
+        }
+
+        if (auction.sellerId.toString() === req.session.userId.toString()) {
+            return res.status(400).json({ success: false, message: 'Cannot bid on your own auction' });
+        }
+
+        if (!auction.isActive()) {
+            return res.status(400).json({ success: false, message: 'Auction is not active' });
+        }
+
+        const bidAmount = parseFloat(amount);
+        if (bidAmount <= auction.currentBid) {
+            return res.status(400).json({ 
+                success: false, 
+                message: `Bid must be higher than current bid of $${auction.currentBid}` 
+            });
+        }
+
+        if (bidAmount < auction.currentBid + auction.bidIncrement) {
+            return res.status(400).json({ 
+                success: false, 
+                message: `Minimum bid increment is $${auction.bidIncrement}` 
+            });
+        }
+
+        // Place the bid
+        auction.bids.push({ userId: req.session.userId, amount: bidAmount });
+        auction.currentBid = bidAmount;
+        auction.highestBidder = req.session.userId;
+        await auction.save();
+
+        // Create notification for previous highest bidder
+        if (auction.bids.length > 1) {
+            const previousBid = auction.bids[auction.bids.length - 2];
+            if (previousBid.userId.toString() !== req.session.userId.toString()) {
+                const notification = new Notification({
+                    userId: previousBid.userId,
+                    type: 'auction_outbid',
+                    title: 'You have been outbid!',
+                    message: `Someone placed a higher bid on "${auction.title}"`,
+                    link: `/auctions`
+                });
+                await notification.save();
+            }
+        }
+
+        // Create notification for seller
+        const user = await User.findById(req.session.userId);
+        const sellerNotification = new Notification({
+            userId: auction.sellerId,
+            type: 'auction_bid',
+            title: 'New bid on your auction!',
+            message: `${user.email.split('@')[0]} placed a bid of $${bidAmount} on "${auction.title}"`,
+            link: `/auctions`
+        });
+        await sellerNotification.save();
+
+        res.json({ success: true, message: 'Bid placed successfully', currentBid: bidAmount });
+    } catch (error) {
+        console.error('Place bid error:', error);
+        res.status(500).json({ success: false, message: 'Failed to place bid' });
+    }
+});
+
+// Watch/Unwatch Auction
+app.post('/api/auctions/:id/watch', requireVerified, async (req, res) => {
+    try {
+        const auction = await Auction.findById(req.params.id);
+        
+        if (!auction) {
+            return res.status(404).json({ success: false, message: 'Auction not found' });
+        }
+
+        const userId = req.session.userId;
+        const isWatching = auction.watchers.includes(userId);
+
+        if (isWatching) {
+            auction.watchers.pull(userId);
+            await auction.save();
+            res.json({ success: true, watching: false, message: 'Stopped watching auction' });
+        } else {
+            auction.watchers.push(userId);
+            await auction.save();
+            res.json({ success: true, watching: true, message: 'Now watching auction' });
+        }
+    } catch (error) {
+        console.error('Watch auction error:', error);
+        res.status(500).json({ success: false, message: 'Failed to update watch status' });
+    }
+});
+
+// Get Auction Details
+app.get('/api/auctions/:id', requireVerified, async (req, res) => {
+    try {
+        const auction = await Auction.findById(req.params.id)
+            .populate('sellerId', 'email')
+            .populate('highestBidder', 'email')
+            .populate('bids.userId', 'email');
+
+        if (!auction) {
+            return res.status(404).json({ success: false, message: 'Auction not found' });
+        }
+
+        // Increment views if not the owner viewing
+        if (auction.sellerId._id.toString() !== req.session.userId.toString()) {
+            auction.views += 1;
+            await auction.save();
+        }
+
+        res.json({ success: true, auction });
+    } catch (error) {
+        console.error('Get auction details error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch auction details' });
+    }
+});
 
 // Get AI Price Prediction
 app.post('/api/get-price', async (req, res) => {
@@ -822,6 +1205,162 @@ app.get('/api/similar-products/:id', requireVerified, async (req, res) => {
     } catch (error) {
         console.error('Similar products error:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch similar products' });
+    }
+});
+
+// ==================== ADMIN API ====================
+
+// Admin Dashboard Route
+app.get('/admin', requireAdmin, async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId);
+        res.render('admin-dashboard', { user });
+    } catch (error) {
+        console.error('Admin dashboard error:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Get Pending Products for Admin
+app.get('/api/admin/products/pending', requireAdmin, async (req, res) => {
+    try {
+        const products = await Product.find({ status: 'pending' })
+            .populate('sellerId', 'email name firstName lastName')
+            .sort({ createdAt: -1 });
+        res.json({ success: true, products });
+    } catch (error) {
+        console.error('Fetch pending products error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch pending products' });
+    }
+});
+
+// Get All Products for Admin (with filters)
+app.get('/api/admin/products', requireAdmin, async (req, res) => {
+    try {
+        const { status } = req.query;
+        const filter = status ? { status } : {};
+        
+        const products = await Product.find(filter)
+            .populate('sellerId', 'email name firstName lastName')
+            .populate('verifiedBy', 'email name')
+            .sort({ createdAt: -1 });
+        
+        res.json({ success: true, products });
+    } catch (error) {
+        console.error('Fetch products error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch products' });
+    }
+});
+
+// Approve Product
+app.post('/api/admin/products/:productId/approve', requireAdmin, async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { note } = req.body;
+
+        console.log('Approving product:', productId, 'by user:', req.session.userId);
+
+        const product = await Product.findByIdAndUpdate(
+            productId,
+            {
+                status: 'approved',
+                verificationNote: note || '',
+                verifiedBy: req.session.userId,
+                verifiedAt: new Date()
+            },
+            { new: true }
+        ).populate('sellerId', 'email name');
+
+        if (!product) {
+            console.log('Product not found:', productId);
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        console.log('Product approved successfully:', product.title);
+
+        // Send notification to seller
+        try {
+            const notification = new Notification({
+                userId: product.sellerId._id,
+                type: 'product_approved',
+                title: '✅ Product Approved!',
+                message: `Your product "${product.title}" has been approved and is now live on the marketplace.`,
+                link: `/product/${product._id}`
+            });
+            await notification.save();
+        } catch (notifError) {
+            console.error('Notification error (non-critical):', notifError);
+        }
+
+        res.json({ success: true, message: 'Product approved successfully', product });
+    } catch (error) {
+        console.error('Approve product error:', error);
+        res.status(500).json({ success: false, message: 'Failed to approve product: ' + error.message });
+    }
+});
+
+// Reject Product
+app.post('/api/admin/products/:productId/reject', requireAdmin, async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { note } = req.body;
+
+        const product = await Product.findByIdAndUpdate(
+            productId,
+            {
+                status: 'rejected',
+                verificationNote: note || 'Product does not meet our guidelines',
+                verifiedBy: req.session.userId,
+                verifiedAt: new Date()
+            },
+            { new: true }
+        ).populate('sellerId', 'email name');
+
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        // Send notification to seller
+        const notification = new Notification({
+            userId: product.sellerId._id,
+            type: 'product_rejected',
+            title: '❌ Product Rejected',
+            message: `Your product "${product.title}" was rejected. Reason: ${note || 'Does not meet guidelines'}`,
+            link: `/my-products`
+        });
+        await notification.save();
+
+        res.json({ success: true, message: 'Product rejected', product });
+    } catch (error) {
+        console.error('Reject product error:', error);
+        res.status(500).json({ success: false, message: 'Failed to reject product' });
+    }
+});
+
+// Get Admin Stats
+app.get('/api/admin/stats', requireAdmin, async (req, res) => {
+    try {
+        const totalProducts = await Product.countDocuments();
+        const pendingProducts = await Product.countDocuments({ status: 'pending' });
+        const approvedProducts = await Product.countDocuments({ status: 'approved' });
+        const rejectedProducts = await Product.countDocuments({ status: 'rejected' });
+        const totalUsers = await User.countDocuments();
+        const verifiedUsers = await User.countDocuments({ isVerified: true });
+
+        res.json({
+            success: true,
+            stats: {
+                totalProducts,
+                pendingProducts,
+                approvedProducts,
+                rejectedProducts,
+                totalUsers,
+                verifiedUsers
+            }
+        });
+    } catch (error) {
+        console.error('Admin stats error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch stats' });
     }
 });
 

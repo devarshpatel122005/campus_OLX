@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title><%= typeof title !== 'undefined' ? title : 'CampusOLX' %> - Campus Marketplace</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CampusOLX">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+  
+  <!-- Splash Screens for iOS -->
+  <link rel="apple-touch-startup-image" href="/splash/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom Mobile CSS -->
+  <style>
+    :root {
+      --primary-blue: #3b82f6;
+      --light-bg: #f8fafc;
+      --pure-white: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --safe-area-top: env(safe-area-inset-top);
+      --safe-area-bottom: env(safe-area-inset-bottom);
+      --safe-area-left: env(safe-area-inset-left);
+      --safe-area-right: env(safe-area-inset-right);
+      --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+      --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      padding-top: var(--safe-area-top);
+      padding-bottom: var(--safe-area-bottom);
+      padding-left: var(--safe-area-left);
+      padding-right: var(--safe-area-right);
+      min-height: 100vh;
+    }
+
+    /* App Shell - Top Bar */
+    .mobile-top-bar {
+      position: fixed;
+      top: var(--safe-area-top);
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .mobile-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .mobile-logo i {
+      font-size: 1.6rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
+    }
+
+    .notification-btn {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: var(--pure-white);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.3rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .notification-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary-blue);
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      border: 3px solid var(--pure-white);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      animation: pulse-notification 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-notification {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Main Content Area */
+    .mobile-content {
+      padding-top: 90px;
+      padding-bottom: 120px;
+      min-height: 100vh;
+    }
+
+    /* Bottom Navigation - Floating Glass Dock */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: calc(var(--safe-area-bottom) + 20px);
+      left: 20px;
+      right: 20px;
+      height: 80px;
+      background: var(--gradient-glass);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 16px;
+      z-index: 1000;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 0 40px rgba(59, 130, 246, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      color: var(--text-muted);
+      min-width: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      border-radius: 20px;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
+    .nav-item i {
+      font-size: 1.4rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-item span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-item.active {
+      color: var(--text-dark);
+      transform: translateY(-4px);
+    }
+
+    .nav-item.active::before {
+      opacity: 1;
+    }
+
+    .nav-item.active i {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+    }
+
+    .nav-item:not(.post-btn):not(.active):hover {
+      color: var(--text-primary);
+      background: rgba(59, 130, 246, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* Floating Post Button - Center Elevated */
+    .post-btn {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+      font-size: 1.8rem;
+      box-shadow: 
+        0 12px 35px rgba(59, 130, 246, 0.4),
+        0 0 30px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform: translateY(-12px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 4px solid var(--pure-white);
+      overflow: hidden;
+    }
+
+    .post-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+
+    .post-btn:hover::before {
+      animation: shimmer 0.6s ease-in-out;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+
+    .post-btn:hover {
+      transform: translateY(-16px) scale(1.08);
+      box-shadow: 
+        0 16px 45px rgba(59, 130, 246, 0.5),
+        0 0 40px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      color: white;
+    }
+
+    .post-btn::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.3;
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.15); opacity: 0.1; }
+      100% { transform: scale(1); opacity: 0.3; }
+    }
+
+    /* Enhanced Glass Cards */
+    .glass-card {
+      background: var(--gradient-glass);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .glass-card:hover::before {
+      left: 100%;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 
+        0 16px 50px rgba(0, 0, 0, 0.12),
+        0 0 30px rgba(59, 130, 246, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    /* Pull to Refresh */
+    .pull-to-refresh {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-blue);
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .pull-to-refresh.visible {
+      opacity: 1;
+      top: 20px;
+    }
+
+    .pull-to-refresh i {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Touch-friendly buttons */
+    .btn-mobile {
+      min-height: 44px;
+      padding: 12px 24px;
+      border-radius: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-mobile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-mobile:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary-mobile {
+      background: var(--gradient-primary);
+      color: var(--text-dark);
+      border: none;
+      box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary-mobile:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 12px 35px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      color: var(--text-dark);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 375px) {
+      .mobile-bottom-nav {
+        padding: 0 10px;
+      }
+      
+      .nav-item {
+        min-width: 50px;
+        padding: 6px 8px;
+      }
+      
+      .nav-item span {
+        font-size: 0.65rem;
+      }
+    }
+
+    /* Dark scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+
+    /* Hide desktop elements on mobile */
+    @media (max-width: 768px) {
+      .d-desktop {
+        display: none !important;
+      }
+    }
+
+    /* Show mobile elements only on mobile */
+    @media (min-width: 769px) {
+      .d-mobile {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Mobile App Shell -->
+  <div class="d-mobile">
+    <!-- Top Bar -->
+    <div class="mobile-top-bar">
+      <div class="mobile-logo">
+        <i class="bi bi-cpu-fill"></i>
+        <span>CampusOLX</span>
+      </div>
+      <button class="notification-btn" onclick="openNotifications()">
+        <i class="bi bi-bell"></i>
+        <% if (user) { %>
+          <span class="notification-badge" id="mobile-notif-count" style="display: none;">0</span>
+        <% } %>
+      </button>
+    </div>
+
+    <!-- Pull to Refresh Indicator -->
+    <div class="pull-to-refresh" id="pullToRefresh">
+      <i class="bi bi-arrow-clockwise"></i>
+    </div>
+
+    <!-- Main Content -->
+    <div class="mobile-content">
+      <%- body %>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+      <a href="/" class="nav-item <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">
+        <i class="bi bi-house-fill"></i>
+        <span>Home</span>
+      </a>
+      
+      <a href="/dashboard" class="nav-item <%= typeof currentPage !== 'undefined' && currentPage === 'search' ? 'active' : '' %>">
+        <i class="bi bi-search"></i>
+        <span>Search</span>
+      </a>
+      
+      <a href="/post-ad" class="nav-item post-btn">
+        <i class="bi bi-plus-lg"></i>
+      </a>
+      
+      <a href="/chat" class="nav-item <%= typeof currentPage !== 'undefined' && currentPage === 'chat' ? 'active' : '' %>">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span>Chat</span>
+      </a>
+      
+      <a href="/profile" class="nav-item <%= typeof currentPage !== 'undefined' && currentPage === 'profile' ? 'active' : '' %>">
+        <i class="bi bi-person-circle"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Desktop Layout (fallback) -->
+  <div class="d-desktop">
+    <%- include('layout', { user, body }) %>
+  </div>
+
+  <!-- Enhanced PWA Install Prompt -->
+  <div id="installPrompt" class="install-prompt" style="display: none;">
+    <div class="install-backdrop"></div>
+    <div class="install-sheet">
+      <div class="install-handle"></div>
+      <div class="install-header">
+        <div class="install-icon-container">
+          <div class="install-icon">
+            <i class="bi bi-cpu-fill"></i>
+          </div>
+          <div class="install-glow"></div>
+        </div>
+        <h3>Install CampusOLX</h3>
+        <p>Get the full native app experience with offline access, push notifications, and faster performance</p>
+      </div>
+      <div class="install-preview">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="home-grid">
+              <div class="app-icon-home">
+                <i class="bi bi-cpu-fill"></i>
+              </div>
+              <div class="app-name">CampusOLX</div>
+            </div>
+          </div>
+          <div class="phone-indicator"></div>
+        </div>
+        <div class="install-benefits">
+          <div class="benefit-item">
+            <i class="bi bi-lightning-charge-fill"></i>
+            <span>Lightning Fast</span>
+          </div>
+          <div class="benefit-item">
+            <i class="bi bi-wifi-off"></i>
+            <span>Works Offline</span>
+          </div>
+          <div class="benefit-item">
+            <i class="bi bi-bell-fill"></i>
+            <span>Push Notifications</span>
+          </div>
+        </div>
+      </div>
+      <div class="install-actions">
+        <button class="btn-install-primary" id="installBtn">
+          <div class="btn-content">
+            <i class="bi bi-download"></i>
+            <span>Add to Home Screen</span>
+          </div>
+          <div class="btn-shine"></div>
+        </button>
+        <button class="btn-install-secondary" id="installLater">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Offline Screen -->
+  <div id="offlineScreen" class="offline-screen" style="display: none;">
+    <div class="offline-content">
+      <div class="offline-animation">
+        <div class="offline-icon">
+          <i class="bi bi-wifi-off"></i>
+        </div>
+        <div class="offline-waves">
+          <div class="wave wave-1"></div>
+          <div class="wave wave-2"></div>
+          <div class="wave wave-3"></div>
+        </div>
+      </div>
+      <h2>You're Offline</h2>
+      <p>No worries! You can still browse your saved items and recent activity below.</p>
+      <div class="offline-stats">
+        <div class="stat-item">
+          <i class="bi bi-bookmark-fill"></i>
+          <span id="cachedCount">0</span>
+          <small>Saved Items</small>
+        </div>
+        <div class="stat-item">
+          <i class="bi bi-clock-history"></i>
+          <span>Recent</span>
+          <small>Activity</small>
+        </div>
+      </div>
+      <div class="offline-items glass-card" id="offlineItems">
+        <!-- Cached items will be loaded here -->
+      </div>
+      <button class="btn-primary-mobile retry-btn" onclick="checkConnection()">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span>Try Again</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- PWA JavaScript -->
+  <script>
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    let installPromptShown = localStorage.getItem('installPromptShown');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      if (!installPromptShown) {
+        setTimeout(() => {
+          showInstallPrompt();
+        }, 3000);
+      }
+    });
+
+    function showInstallPrompt() {
+      document.getElementById('installPrompt').style.display = 'flex';
+    }
+
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        deferredPrompt = null;
+      }
+      hideInstallPrompt();
+    });
+
+    document.getElementById('installLater').addEventListener('click', () => {
+      hideInstallPrompt();
+    });
+
+    function hideInstallPrompt() {
+      document.getElementById('installPrompt').style.display = 'none';
+      localStorage.setItem('installPromptShown', 'true');
+    }
+
+    // Pull to Refresh
+    let startY = 0;
+    let currentY = 0;
+    let pullDistance = 0;
+    let isPulling = false;
+
+    document.addEventListener('touchstart', (e) => {
+      if (window.scrollY === 0) {
+        startY = e.touches[0].clientY;
+        isPulling = true;
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isPulling) return;
+      
+      currentY = e.touches[0].clientY;
+      pullDistance = currentY - startY;
+      
+      if (pullDistance > 0 && pullDistance < 100) {
+        const pullIndicator = document.getElementById('pullToRefresh');
+        pullIndicator.classList.add('visible');
+        pullIndicator.style.transform = `translateX(-50%) translateY(${pullDistance}px)`;
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isPulling && pullDistance > 60) {
+        // Trigger refresh
+        location.reload();
+      }
+      
+      isPulling = false;
+      pullDistance = 0;
+      document.getElementById('pullToRefresh').classList.remove('visible');
+    });
+
+    // Offline Detection
+    window.addEventListener('online', () => {
+      document.getElementById('offlineScreen').style.display = 'none';
+    });
+
+    window.addEventListener('offline', () => {
+      document.getElementById('offlineScreen').style.display = 'flex';
+      loadOfflineItems();
+    });
+
+    function loadOfflineItems() {
+      // Load cached items from localStorage or IndexedDB
+      const cachedItems = JSON.parse(localStorage.getItem('cachedItems') || '[]');
+      const offlineItemsContainer = document.getElementById('offlineItems');
+      const cachedCountElement = document.getElementById('cachedCount');
+      
+      if (cachedCountElement) {
+        cachedCountElement.textContent = cachedItems.length;
+      }
+      
+      if (cachedItems.length > 0) {
+        offlineItemsContainer.innerHTML = cachedItems.map(item => `
+          <div class="offline-item-card mb-3 p-3" style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <h6 class="fw-bold mb-1" style="color: var(--text-primary);">${item.title}</h6>
+                <p class="text-muted small mb-2">${item.description.length > 80 ? item.description.substring(0, 80) + '...' : item.description}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold" style="color: var(--primary-blue);">₹${item.price}</span>
+                  <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: var(--primary-blue);">${item.category}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        offlineItemsContainer.innerHTML = `
+          <div class="text-center py-4">
+            <i class="bi bi-inbox" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 12px; display: block;"></i>
+            <p class="text-muted mb-0">No cached items available</p>
+            <small class="text-muted">Items you view will be saved for offline access</small>
+          </div>
+        `;
+      }
+    }
+
+    function checkConnection() {
+      if (navigator.onLine) {
+        document.getElementById('offlineScreen').style.display = 'none';
+        location.reload();
+      } else {
+        alert('Still offline. Please check your internet connection.');
+      }
+    }
+
+    function openNotifications() {
+      window.location.href = '/notifications';
+    }
+
+    // Load notification count
+    <% if (user) { %>
+      async function loadNotificationCount() {
+        try {
+          const response = await fetch('/api/notifications/unread-count');
+          const data = await response.json();
+          if (data.success && data.count > 0) {
+            const badge = document.getElementById('mobile-notif-count');
+            if (badge) {
+              badge.textContent = data.count > 99 ? '99+' : data.count;
+              badge.style.display = 'flex';
+            }
+          }
+        } catch (error) {
+          console.error('Error loading notification count:', error);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadNotificationCount);
+      } else {
+        loadNotificationCount();
+      }
+    <% } %>
+  </script>
+
+  <!-- Enhanced Install Prompt & Offline Screen Styles -->
+  <style>
+    /* Enhanced Install Prompt */
+    .install-prompt {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .install-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .install-sheet {
+      background: var(--gradient-glass);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--glass-border);
+      border-radius: 32px 32px 0 0;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      animation: slideUpBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 
+        var(--glass-shadow),
+        0 0 50px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .install-handle {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      margin: 0 auto 24px;
+    }
+
+    @keyframes slideUpBounce {
+      0% { transform: translateY(100%); opacity: 0; }
+      60% { transform: translateY(-10px); opacity: 1; }
+      100% { transform: translateY(0); }
+    }
+
+    .install-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .install-icon-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .install-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient-primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: var(--text-dark);
+      box-shadow: 
+        0 12px 35px rgba(59, 130, 246, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .install-glow {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: var(--gradient-primary);
+      border-radius: 25px;
+      opacity: 0.3;
+      filter: blur(15px);
+      animation: glow-pulse 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+
+    .install-header h3 {
+      margin-bottom: 12px;
+      font-weight: 800;
+      font-size: 1.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .install-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .install-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin: 28px 0;
+    }
+
+    .phone-mockup {
+      width: 140px;
+      height: 280px;
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      border-radius: 28px;
+      padding: 8px;
+      position: relative;
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 20px;
+      background: #000;
+      border-radius: 10px;
+      z-index: 3;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--midnight-blue);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    }
+
+    .home-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .app-icon-home {
+      width: 56px;
+      height: 56px;
+      background: var(--gradient-primary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+      font-size: 1.6rem;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .app-name {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .phone-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+    }
+
+    .install-benefits {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .benefit-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .benefit-item i {
+      font-size: 1.2rem;
+      color: var(--primary-blue);
+      background: rgba(59, 130, 246, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .install-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-install-primary {
+      background: var(--gradient-primary);
+      color: var(--text-dark);
+      border: none;
+      padding: 18px 28px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .btn-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn-install-primary:hover .btn-shine {
+      left: 100%;
+    }
+
+    .btn-install-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 35px rgba(59, 130, 246, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-install-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--glass-border);
+      padding: 14px 28px;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-install-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Enhanced Offline Screen */
+    .offline-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--midnight-blue);
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .offline-content {
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .offline-animation {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 32px;
+    }
+
+    .offline-icon {
+      width: 100px;
+      height: 100px;
+      background: var(--gradient-glass);
+      backdrop-filter: blur(20px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: var(--text-muted);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      position: relative;
+      z-index: 2;
+    }
+
+    .offline-waves {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .wave {
+      position: absolute;
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 50%;
+      animation: wave-pulse 2s ease-in-out infinite;
+    }
+
+    .wave-1 {
+      width: 120px;
+      height: 120px;
+      animation-delay: 0s;
+    }
+
+    .wave-2 {
+      width: 160px;
+      height: 160px;
+      animation-delay: 0.5s;
+    }
+
+    .wave-3 {
+      width: 200px;
+      height: 200px;
+      animation-delay: 1s;
+    }
+
+    @keyframes wave-pulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+    }
+
+    .offline-content h2 {
+      margin-bottom: 16px;
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offline-content p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .offline-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-item i {
+      font-size: 1.5rem;
+      color: var(--primary-blue);
+      background: rgba(59, 130, 246, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .stat-item span {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .stat-item small {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .offline-items {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 24px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .retry-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 32px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .retry-btn i {
+      font-size: 1.2rem;
+      animation: spin-slow 2s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 375px) {
+      .install-sheet {
+        padding: 28px 20px;
+      }
+      
+      .install-benefits {
+        gap: 16px;
+      }
+      
+      .benefit-item {
+        font-size: 0.75rem;
+      }
+      
+      .offline-stats {
+        gap: 24px;
+      }
+    }
+  </style>
+</body>
+</html>

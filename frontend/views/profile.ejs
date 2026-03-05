@@ -65,7 +65,7 @@
                         <div
                             style="height: 200px; background: ${product.images.length > 0 ? `url('${product.images[0]}') center/cover` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}; border-radius: 10px 10px 0 0; position: relative;">
                             ${product.images.length === 0 ? `<div
-                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px;">
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-dark); font-size: 48px;">
                                 <i class="bi bi-image"></i></div>` : ''}
                             <span
                                 class="badge bg-primary position-absolute top-0 end-0 m-2 text-capitalize">${product.category}</span>
@@ -120,7 +120,7 @@
                         <div
                             style="height: 200px; background: ${product.images.length > 0 ? `url('${product.images[0]}') center/cover` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}; border-radius: 10px 10px 0 0; position: relative;">
                             ${product.images.length === 0 ? `<div
-                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px;">
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-dark); font-size: 48px;">
                                 <i class="bi bi-image"></i></div>` : ''}
                             <span class="badge bg-success position-absolute top-0 end-0 m-2">SOLD</span>
                         </div>
