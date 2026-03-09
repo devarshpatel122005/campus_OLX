@@ -158,8 +158,10 @@
 }
 
 .product-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-5px) scale(1.01);
   box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+  z-index: 2;
+  position: relative;
 }
 
 /* Badge Enhancements */
@@ -184,8 +186,10 @@
   background: rgba(30, 41, 59, 0.8);
 }
 
-/* Improved Transitions */
-* {
+/* Improved Transitions - scoped to avoid affecting all elements globally */
+*,
+*::before,
+*::after {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
