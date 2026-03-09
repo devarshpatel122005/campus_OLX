@@ -79,10 +79,10 @@
       const messageDiv = document.getElementById('registerMessage');
       const sendBtn = document.getElementById('sendOtpBtn');
 
-      if (!email || !/^[^\\s@]+@gcet\\.ac\\.in$/.test(email)) {
+      if (!email || (!/^[^\\s@]+@gcet\\.ac\\.in$/.test(email) && !/^[^\\s@]+@gmail\\.com$/.test(email))) {
         messageDiv.innerHTML = \`
           <div class="alert alert-warning">
-            <i class="bi bi-exclamation-triangle"></i> Please enter a valid @gcet.ac.in email
+            <i class="bi bi-exclamation-triangle"></i> Please enter a valid @gcet.ac.in or @gmail.com email
           </div>
         \`;
         return;

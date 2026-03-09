@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['electronics', 'books', 'furniture', 'clothing', 'sports', 'other']
+        enum: ['books-quantums', 'engineering-tools', 'mobiles-gadgets', 'laptops-accessories', 'bicycles-ride-ons', 'hostel-pg-essentials', 'electronics-components', 'coolers-fans', 'bags-luggage', 'hobbies-music', 'other']
     },
     condition: {
         type: Number,
@@ -49,8 +49,21 @@ const productSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['available', 'sold', 'reserved'],
-        default: 'available'
+        enum: ['pending', 'approved', 'rejected', 'available', 'sold', 'reserved'],
+        default: 'pending'
+    },
+    verificationNote: {
+        type: String,
+        default: ''
+    },
+    verifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
+    verifiedAt: {
+        type: Date,
+        default: null
     },
     views: {
         type: Number,

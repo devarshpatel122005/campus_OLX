@@ -9,9 +9,10 @@ const userSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function (v) {
-        return /^[^\s@]+@gcet\.ac\.in$/.test(v);
+        // Allow Gmail addresses or @gcet.ac.in domain
+        return /^[^\s@]+@gmail\.com$/.test(v) || /^[^\s@]+@gcet\.ac\.in$/.test(v);
       },
-      message: 'Email must end with @gcet.ac.in'
+      message: 'Email must end with @gcet.ac.in or @gmail.com'
     }
   },
   password: {
@@ -20,6 +21,10 @@ const userSchema = new mongoose.Schema({
     minlength: 6
   },
   isVerified: {
+    type: Boolean,
+    default: false
+  },
+  isAdmin: {
     type: Boolean,
     default: false
   },

@@ -1,8 +1,37 @@
+# Dependencies
 node_modules/
+backend/node_modules/
+ai_service/venv/
+
+# Environment variables
 .env
-public/uploads/*
-!public/uploads/.gitkeep
+backend/.env
+
+# Uploads
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep
+
+# Python
 *.pkl
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# OS
 .DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

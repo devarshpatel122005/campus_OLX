@@ -25,11 +25,16 @@
                                 </label>
                                 <select class="form-select" id="category" required>
                                     <option value="">Select category</option>
-                                    <option value="electronics">Electronics</option>
-                                    <option value="books">Books</option>
-                                    <option value="furniture">Furniture</option>
-                                    <option value="clothing">Clothing</option>
-                                    <option value="sports">Sports</option>
+                                    <option value="books-quantums">📚 Books & Quantums</option>
+                                    <option value="engineering-tools">📐 Engineering Tools</option>
+                                    <option value="mobiles-gadgets">📱 Mobiles & Gadgets</option>
+                                    <option value="laptops-accessories">💻 Laptops & Accessories</option>
+                                    <option value="bicycles-ride-ons">🚲 Bicycles & Ride-ons</option>
+                                    <option value="hostel-pg-essentials">🏠 Hostel & PG Essentials</option>
+                                    <option value="electronics-components">⚡ Electronics & Components</option>
+                                    <option value="coolers-fans">❄️ Coolers & Fans</option>
+                                    <option value="bags-luggage">🎒 Bags & Luggage</option>
+                                    <option value="hobbies-music">🎸 Hobbies & Music</option>
                                     <option value="other">Other</option>
                                 </select>
                             </div>
@@ -209,10 +214,10 @@
                 if (data.success) {
                     messageDiv.innerHTML = \`
             <div class="alert alert-success">
-              <i class="bi bi-check-circle"></i> Item posted successfully! Redirecting...
+              <i class="bi bi-check-circle"></i> Item posted successfully! Your product is pending admin verification and will be visible once approved.
             </div>
           \`;
-          setTimeout(() => window.location.href = '/dashboard', 1500);
+          setTimeout(() => window.location.href = '/my-products', 2000);
         } else {
           messageDiv.innerHTML = \`
             <div class="alert alert-danger">
