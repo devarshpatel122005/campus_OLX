@@ -1,80 +1,70 @@
 <%
 const user = typeof locals.user !== 'undefined' ? locals.user : null;
 const body = `
-<!-- Hero Section with Floating 3D Elements -->
+<!-- Hero Section -->
 <section class="hero-section position-relative overflow-hidden">
   <div class="container">
-    <div class="row align-items-center min-vh-100 py-5">
+    <div class="row align-items-center py-5" style="min-height: calc(100vh - 72px)">
       <div class="col-lg-6" data-aos="fade-right">
         <div class="hero-content">
-          <div class="badge badge-gradient mb-4 px-4 py-2 pulse-glow">
-            <i class="bi bi-cpu-fill me-2"></i>AI-Powered Campus Marketplace
+          <div class="badge badge-gradient mb-4 px-3 py-2">
+            <i class="bi bi-stars"></i> AI-Powered Marketplace
           </div>
-          
-          <!-- Hero Title with Text Gradient -->
-          <h1 class="hero-title display-1 fw-bold mb-4 lh-1">
-            <span class="text-gradient-hero">Sell Smart,</span><br>
-            <span class="text-gradient-accent">Buy Cheap</span>
+          <h1 class="display-2 fw-bold mb-4 lh-1">
+            Your Campus
+            <span class="position-relative">
+              <span class="navbar-brand">Marketplace</span>
+              <svg class="position-absolute" style="bottom: -10px; left: 0; width: 100%; height: 20px;" viewBox="0 0 300 20">
+                <path d="M0,15 Q150,0 300,15" stroke="url(#gradient)" stroke-width="3" fill="none"/>
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#667eea"/>
+                    <stop offset="100%" style="stop-color:#764ba2"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <br>Reimagined
           </h1>
-          
-          <p class="lead mb-5 text-dark fs-4 hero-subtitle">
-            The most advanced campus marketplace powered by AI. 
-            Connect with fellow students, discover amazing deals, and trade with confidence.
+          <p class="lead mb-5 text-secondary fs-4">
+            Buy, sell, and discover amazing deals from fellow students. 
+            Powered by AI for smart pricing and seamless experiences.
           </p>
 
-          <!-- Floating Glowing Search Bar -->
-          <div class="hero-search-container mb-5" data-aos="fade-up" data-aos-delay="300">
-            <div class="floating-search-pill glass-strong p-3">
-              <div class="input-group">
-                <span class="input-group-text border-0 bg-transparent">
-                  <i class="bi bi-search text-electric-blue fs-5"></i>
-                </span>
-                <input type="text" class="form-control border-0 bg-transparent text-dark" 
-                       placeholder="Search for books, electronics, furniture..." 
-                       style="box-shadow: none;">
-                <button class="btn btn-gradient px-4" type="button">
-                  <i class="bi bi-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- CTA Buttons -->
           <div class="d-flex flex-wrap gap-3 mb-5">
-            <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg px-5 py-3 pulse-glow">
-              <i class="bi bi-rocket-takeoff me-2"></i>Start Trading
+            <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg px-5 py-3">
+              <i class="bi bi-rocket-takeoff me-2"></i>Start Exploring
             </a>
             <a href="/dashboard" class="btn btn-secondary-gradient btn-lg px-5 py-3">
-              <i class="bi bi-eye me-2"></i>Browse Items
+              <i class="bi bi-search me-2"></i>Browse Items
             </a>
           </div>
 
-          <!-- Feature Icons -->
-          <div class="row g-4 hero-features">
+          <div class="row g-4">
             <div class="col-4">
-              <div class="feature-card glass text-center p-3">
-                <div class="feature-icon-modern mb-3">
-                  <i class="bi bi-robot"></i>
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-robot fs-1"></i>
                 </div>
-                <h6 class="fw-bold text-dark mb-1">AI Pricing</h6>
+                <h6 class="fw-bold">AI Pricing</h6>
                 <small class="text-muted">Smart suggestions</small>
               </div>
             </div>
             <div class="col-4">
-              <div class="feature-card glass text-center p-3">
-                <div class="feature-icon-modern mb-3">
-                  <i class="bi bi-shield-check"></i>
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-shield-check fs-1"></i>
                 </div>
-                <h6 class="fw-bold text-dark mb-1">Verified</h6>
+                <h6 class="fw-bold">Verified</h6>
                 <small class="text-muted">College emails only</small>
               </div>
             </div>
             <div class="col-4">
-              <div class="feature-card glass text-center p-3">
-                <div class="feature-icon-modern mb-3">
-                  <i class="bi bi-lightning-charge"></i>
+              <div class="text-center">
+                <div class="feature-icon mb-3">
+                  <i class="bi bi-lightning-charge fs-1"></i>
                 </div>
-                <h6 class="fw-bold text-dark mb-1">Instant</h6>
+                <h6 class="fw-bold">Instant</h6>
                 <small class="text-muted">Real-time chat</small>
               </div>
             </div>
@@ -82,36 +72,58 @@ const body = `
         </div>
       </div>
 
-      <!-- 3D Floating Illustration -->
       <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
         <div class="hero-visual position-relative">
-          <!-- Main 3D Card -->
-          <div class="floating-3d-card glass-strong p-5 text-center">
-            <div class="floating-laptop-icon mb-4">
-              <i class="bi bi-laptop" style="font-size: 6rem; color: var(--electric-blue); filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));"></i>
+          <div class="main-card glass-strong p-5 text-center">
+            <div class="hero-icon mb-4">
+              <i class="bi bi-shop-window" style="font-size: 8rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
             </div>
-            <h3 class="mb-3 text-gradient-hero">Your Campus Hub</h3>
-            <p class="text-muted">Where students connect and trade</p>
-            
-            <!-- Floating Elements Around Main Card -->
-            <div class="floating-elements-3d">
-              <div class="floating-item book" data-aos="zoom-in" data-aos-delay="500">
-                <i class="bi bi-book"></i>
-              </div>
-              <div class="floating-item phone" data-aos="zoom-in" data-aos-delay="700">
-                <i class="bi bi-phone"></i>
-              </div>
-              <div class="floating-item headphones" data-aos="zoom-in" data-aos-delay="900">
-                <i class="bi bi-headphones"></i>
-              </div>
-              <div class="floating-item bicycle" data-aos="zoom-in" data-aos-delay="1100">
-                <i class="bi bi-bicycle"></i>
+            <h3 class="mb-3">Your Campus Marketplace</h3>
+            <p class="text-muted">Where students connect, trade, and thrive</p>
+          </div>
+
+          <!-- Floating Stats Cards -->
+          <div class="floating-card top-right" data-aos="zoom-in" data-aos-delay="400">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-graph-up-arrow fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">AI Accuracy</div>
+                  <div class="h5 mb-0 fw-bold">95%</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Stats Cards -->
-          <!-- Removed AI Accuracy and Active Users stats -->
+          <div class="floating-card bottom-left" data-aos="zoom-in" data-aos-delay="600">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-people fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">Active Users</div>
+                  <div class="h5 mb-0 fw-bold">1,200+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card top-left" data-aos="zoom-in" data-aos-delay="800">
+            <div class="card glass p-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon">
+                  <i class="bi bi-chat-dots fs-3"></i>
+                </div>
+                <div>
+                  <div class="small text-muted">Messages</div>
+                  <div class="h5 mb-0 fw-bold">5K+</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -123,157 +135,154 @@ const body = `
   <div class="container">
     <div class="row">
       <div class="col-12 text-center mb-5" data-aos="fade-up">
-        <div class="badge badge-gradient mb-4 px-4 py-2">
-          <i class="bi bi-stars me-2"></i>Premium Features
+        <div class="badge badge-gradient mb-3 px-3 py-2">
+          <i class="bi bi-star-fill"></i> Premium Features
         </div>
-        <h2 class="display-4 fw-bold mb-4">
-          <span class="text-gradient-hero">Why Choose</span> 
-          <span class="text-gradient-accent">CampusOLX?</span>
-        </h2>
-        <p class="lead text-muted">Experience the future of campus commerce with cutting-edge technology</p>
+        <h2 class="display-4 fw-bold mb-4">Why Choose CampusHub Pro?</h2>
+        <p class="lead text-muted">Experience the future of campus commerce</p>
       </div>
     </div>
 
     <div class="row g-4">
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-lightning-charge-fill"></i>
           </div>
-          <h4 class="mb-3 text-dark">Lightning Fast</h4>
+          <h4 class="mb-3">Lightning Fast</h4>
           <p class="text-muted mb-4">Post items in seconds with our streamlined interface. Start selling immediately with zero hassle.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">One-click posting</span>
+              <small>One-click posting</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Auto-categorization</span>
+              <small>Auto-categorization</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Instant notifications</span>
+              <small>Instant notifications</small>
             </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-robot"></i>
           </div>
-          <h4 class="mb-3 text-dark">AI-Powered Pricing</h4>
+          <h4 class="mb-3">AI-Powered Pricing</h4>
           <p class="text-muted mb-4">Our machine learning algorithm analyzes market trends to suggest optimal prices for your items.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Smart price suggestions</span>
+              <small>Smart price suggestions</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Market trend analysis</span>
+              <small>Market trend analysis</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Profit optimization</span>
+              <small>Profit optimization</small>
             </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-shield-check-fill"></i>
           </div>
-          <h4 class="mb-3 text-dark">Safe & Secure</h4>
+          <h4 class="mb-3">Safe & Secure</h4>
           <p class="text-muted mb-4">College email verification ensures you're only dealing with verified students from your campus.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Email verification</span>
+              <small>Email verification</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Secure transactions</span>
+              <small>Secure transactions</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Report system</span>
+              <small>Report system</small>
             </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-chat-dots-fill"></i>
           </div>
-          <h4 class="mb-3 text-dark">Real-time Chat</h4>
+          <h4 class="mb-3">Real-time Chat</h4>
           <p class="text-muted mb-4">Instant messaging system with notifications keeps you connected with buyers and sellers.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Instant messaging</span>
+              <small>Instant messaging</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Push notifications</span>
+              <small>Push notifications</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Message history</span>
+              <small>Message history</small>
             </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-heart-fill"></i>
           </div>
-          <h4 class="mb-3 text-dark">Smart Wishlist</h4>
+          <h4 class="mb-3">Smart Wishlist</h4>
           <p class="text-muted mb-4">Save items you love and get notified when similar products are posted or prices drop.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Save favorites</span>
+              <small>Save favorites</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Price drop alerts</span>
+              <small>Price drop alerts</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Similar item suggestions</span>
+              <small>Similar item suggestions</small>
             </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-        <div class="feature-card-premium glass-strong h-100 p-4">
+        <div class="card card-premium h-100 p-4 text-center">
           <div class="feature-icon-large mb-4">
             <i class="bi bi-graph-up-arrow"></i>
           </div>
-          <h4 class="mb-3 text-dark">Analytics Dashboard</h4>
+          <h4 class="mb-3">Analytics Dashboard</h4>
           <p class="text-muted mb-4">Track your selling performance with detailed analytics and insights to optimize your listings.</p>
-          <div class="feature-benefits">
-            <div class="benefit-item">
+          <div class="feature-list text-start">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Sales analytics</span>
+              <small>Sales analytics</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">View tracking</span>
+              <small>View tracking</small>
             </div>
-            <div class="benefit-item">
+            <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill text-success me-2"></i>
-              <span class="text-muted">Performance insights</span>
+              <small>Performance insights</small>
             </div>
           </div>
         </div>
@@ -287,21 +296,18 @@ const body = `
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="cta-card glass-strong p-5 text-center" data-aos="zoom-in">
+        <div class="card glass-strong p-5 text-center" data-aos="zoom-in">
           <div class="row align-items-center">
             <div class="col-lg-8">
-              <h2 class="display-5 fw-bold mb-3">
-                <span class="text-gradient-hero">Ready to Start</span> 
-                <span class="text-gradient-accent">Trading?</span>
-              </h2>
-              <p class="lead text-muted mb-4">Join thousands of students already using CampusOLX</p>
+              <h2 class="display-5 fw-bold mb-3">Ready to Start Trading?</h2>
+              <p class="lead text-muted mb-4">Join thousands of students already using CampusHub Pro</p>
             </div>
             <div class="col-lg-4">
               <div class="d-flex flex-column gap-3">
-                <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg pulse-glow">
+                <a href="${user ? '/dashboard' : '/register'}" class="btn btn-gradient btn-lg">
                   <i class="bi bi-rocket-takeoff me-2"></i>Get Started Now
                 </a>
-                <a href="/how-it-works" class="btn btn-outline-primary">
+                <a href="/how-it-works" class="btn btn-outline-light">
                   <i class="bi bi-play-circle me-2"></i>See How It Works
                 </a>
               </div>
@@ -314,228 +320,28 @@ const body = `
 </section>
 
 <style>
-  /* Hero Section Styles */
   .hero-section {
-    min-height: 100vh;
+    min-height: calc(100vh - 72px);
     display: flex;
     align-items: center;
-    position: relative;
   }
 
-  .text-gradient-hero {
-    background: var(--hero-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-accent {
-    background: linear-gradient(135deg, var(--cyber-purple) 0%, var(--electric-blue) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-electric-blue {
-    color: var(--electric-blue);
-  }
-
-  .text-light-gray {
-    color: var(--text-light-gray);
-  }
-
-  .hero-title {
-    font-size: 4.5rem;
-    line-height: 1.1;
-  }
-
-  .hero-subtitle {
-    font-size: 1.25rem;
-    line-height: 1.6;
-  }
-
-  /* Floating Search Pill */
-  .floating-search-pill {
-    border-radius: 50px;
-    box-shadow: 
-      var(--shadow-glass),
-      var(--glow-blue);
-    transition: all 0.3s ease;
-  }
-
-  .floating-search-pill:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-      var(--shadow-hover),
-      0 0 30px rgba(59, 130, 246, 0.4);
-  }
-
-  /* Feature Cards */
-  .feature-card {
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    border: 1px solid var(--glass-border);
-  }
-
-  .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--glow-blue);
-  }
-
-  .feature-icon-modern {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    background: var(--card-gradient);
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--glass-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    color: var(--electric-blue);
-    font-size: 1.5rem;
-    border: 1px solid rgba(59, 130, 246, 0.2);
-  }
-
-  /* 3D Visual Elements */
-  .floating-3d-card {
-    border-radius: 30px;
-    min-height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    box-shadow: 
-      var(--shadow-glass),
-      var(--glow-blue);
-  }
-
-  .floating-elements-3d {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-  }
-
-  .floating-item {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: var(--electric-blue);
-    backdrop-filter: blur(10px);
-    animation: float-3d 6s ease-in-out infinite;
-  }
-
-  .floating-item.book {
-    top: 10%;
-    left: -10%;
-    animation-delay: 0s;
-  }
-
-  .floating-item.phone {
-    top: 20%;
-    right: -10%;
-    animation-delay: 1.5s;
-  }
-
-  .floating-item.headphones {
-    bottom: 30%;
-    left: -15%;
-    animation-delay: 3s;
-  }
-
-  .floating-item.bicycle {
-    bottom: 10%;
-    right: -5%;
-    animation-delay: 4.5s;
-  }
-
-  @keyframes float-3d {
-    0%, 100% { 
-      transform: translateY(0px) rotate(0deg); 
-      box-shadow: var(--shadow-glass);
-    }
-    33% { 
-      transform: translateY(-20px) rotate(5deg); 
-      box-shadow: var(--shadow-hover), var(--glow-blue);
-    }
-    66% { 
-      transform: translateY(10px) rotate(-5deg); 
-      box-shadow: var(--shadow-glass);
-    }
-  }
-
-  /* Floating Stats */
-  .floating-stat {
-    position: absolute;
-    z-index: 2;
-  }
-
-  .floating-stat.top-right {
-    top: -10px;
-    right: -10px;
-  }
-
-  .floating-stat.bottom-left {
-    bottom: -10px;
-    left: -10px;
-  }
-
-  .stat-icon-modern {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: var(--primary-gradient);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.2rem;
-  }
-
-  /* Premium Feature Cards */
-  .feature-card-premium {
-    border-radius: 20px;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .feature-card-premium::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--primary-gradient);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-  }
-
-  .feature-card-premium:hover::before {
-    transform: scaleX(1);
-  }
-
-  .feature-card-premium:hover {
-    transform: translateY(-10px);
-    box-shadow: 
-      var(--shadow-hover),
-      var(--glow-blue);
+    color: var(--text-primary);
   }
 
   .feature-icon-large {
     width: 80px;
     height: 80px;
-    border-radius: 20px;
+    border-radius: 50%;
     background: var(--primary-gradient);
     display: flex;
     align-items: center;
@@ -543,58 +349,68 @@ const body = `
     margin: 0 auto;
     color: white;
     font-size: 2rem;
-    box-shadow: var(--glow-blue);
   }
 
-  .feature-benefits {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  .hero-visual {
+    position: relative;
+    z-index: 1;
+    padding: 30px 15px;
   }
 
-  .benefit-item {
+  .main-card {
+    border-radius: 30px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .floating-card {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .floating-card.top-right {
+    top: 10px;
+    right: -5px;
+  }
+
+  .floating-card.bottom-left {
+    bottom: 10px;
+    left: -5px;
+  }
+
+  .floating-card.top-left {
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    justify-content: center;
+    color: white;
   }
 
-  .benefit-item:last-child {
-    margin-bottom: 0;
+  .feature-list {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 1rem;
   }
 
-  /* CTA Section */
-  .cta-card {
-    border-radius: 25px;
-    background: var(--card-gradient);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    box-shadow: 
-      var(--shadow-glass),
-      var(--glow-blue);
-  }
-
-  /* Responsive Design */
   @media (max-width: 768px) {
-    .hero-title {
-      font-size: 3rem;
-    }
-    
-    .hero-subtitle {
-      font-size: 1.1rem;
-    }
-    
-    .floating-stat {
+    .floating-card {
       position: static;
       margin: 1rem 0;
     }
     
-    .floating-item {
-      display: none;
-    }
-    
-    .floating-3d-card {
-      min-height: 300px;
+    .display-2 {
+      font-size: 2.5rem;
     }
   }
 </style>
