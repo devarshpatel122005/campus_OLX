@@ -6,6 +6,7 @@ ai_service/venv/
 # Environment variables
 .env
 backend/.env
+.env.example
 
 # Uploads
 frontend/public/uploads/*
